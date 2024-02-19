@@ -1,30 +1,33 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: {
+    'browser': true,
+    'es2021': true,
+    'jest': true
+  },
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended-type-checked',
-    'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/stylistic-type-checked',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime'
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:import/typescript",
+    "plugin:prettier/recommended"
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: [
+    "react",
+    "@typescript-eslint",
+    "prettier"
+  ],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    "linebreak-style": ["error", "unix"],
-    "consistent-return": 2,
-    "indent": [1, 2],
-    "no-else-return": 1,
-    "semi": [1, "always"],
-    "space-unary-ops": 2
+    "react/react-in-jsx-scope": ["off"],
+    "react/jsx-uses-react": ["off"],
+    "react/jsx-props-no-spreading": ["warn"],
+    "react/no-unescaped-entities": ["off"]
   },
   parserOptions: {
+    ecmaFeatures: {
+      jsx: true
+    },
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: ['./tsconfig.json', './tsconfig.node.json'],
