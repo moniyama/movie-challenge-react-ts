@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import App from "../components/App";
 
+jest.mock("../utils/constants", () => "token API");
+
 describe("AppComponent", () => {
   test("demo", () => {
     expect(true).toBe(true);
