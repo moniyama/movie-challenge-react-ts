@@ -1,36 +1,30 @@
-import { useState } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "../../public/vite.svg";
+import { useState, useEffect } from "react";
 import "./App.css";
-import tokenAPI from "../utils/constants";
+import HTTPService from "../services/APIService";
+import { IMovie } from "../models/Movie";
 
 function App() {
-  const [count, setCount] = useState(0);
-  console.log(tokenAPI);
+  const [movies, setMovies] = useState<IMovie[]>([]);
+
+  async function getMovies() {
+    const result = await HTTPService.getMovies();
+    setMovies(result);
+  }
+
+  useEffect(() => {
+    getMovies();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" rel="noreferrer" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" rel="noreferrer" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((number) => number + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ul>
+      {movies.map(({ id, title, releaseYear, poster }) => (
+        <li key={id}>
+          <h1>{title}</h1>
+          <img src={poster} alt={`poster do filme ${title}`} />
+          <p>{releaseYear}</p>
+        </li>
+      ))}
+    </ul>
   );
 }
 
