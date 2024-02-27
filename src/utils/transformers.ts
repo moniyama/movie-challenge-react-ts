@@ -6,10 +6,10 @@ function formatMovie(movie: IMovieAPI): IMovie {
   const result = {
     id,
     title,
-    poster: movie.poster_path,
-    release_year: Number(movie.release_date.substring(0, 4)),
+    poster: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
+    releaseYear: Number(movie.release_date.substring(0, 4)),
     overview,
-    vote_average: movie.vote_average,
+    voteAverage: movie.vote_average,
     language: movie.original_language,
   };
 
