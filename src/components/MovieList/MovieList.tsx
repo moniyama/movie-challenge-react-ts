@@ -1,18 +1,15 @@
 import "./MovieList.css";
 import { IMovie } from "../../models/Movie";
+import MovieCard from "../MovieCard/MovieCard";
 
 function MovieList({ movies }: { movies: IMovie[] }) {
   return (
     <ul>
-      {movies.map(({ id, title, releaseYear, poster }) => (
-        <li key={id}>
-          <h1>{title}</h1>
-          <img src={poster} alt={`poster do filme ${title}`} />
-          <p>{releaseYear}</p>
-        </li>
+      {movies.map((movie) => (
+        <MovieCard key={movie.id} movie={movie} />
       ))}
     </ul>
   );
 }
 
-export default MovieList
+export default MovieList;
