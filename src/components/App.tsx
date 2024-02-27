@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import HTTPService from "../services/APIService";
 import { IMovie } from "../models/Movie";
+import MovieList from "./MovieList/MovieList";
 
 function App() {
   const [movies, setMovies] = useState<IMovie[]>([]);
@@ -15,17 +16,7 @@ function App() {
     getMovies();
   }, []);
 
-  return (
-    <ul>
-      {movies.map(({ id, title, releaseYear, poster }) => (
-        <li key={id}>
-          <h1>{title}</h1>
-          <img src={poster} alt={`poster do filme ${title}`} />
-          <p>{releaseYear}</p>
-        </li>
-      ))}
-    </ul>
-  );
+  return <MovieList movies={movies} />;
 }
 
 export default App;
