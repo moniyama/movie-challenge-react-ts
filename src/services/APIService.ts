@@ -15,6 +15,12 @@ const HTTPService = {
     return fetch("https://api.themoviedb.org/3/discover/movie", options)
       .then((response) => response.json())
       .then((response) => {
+        if (
+          Object.prototype.hasOwnProperty.call(response, "success") &&
+          !response.success
+        ) {
+          throw Error(response.status_message);
+        }
         return response.results.map((movie: IMovieAPI) => formatMovie(movie));
       })
       .catch((err) => console.error(err));
