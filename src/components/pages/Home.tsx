@@ -10,13 +10,13 @@ function App() {
 
   async function getMovies() {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const result = await HTTPService.getMovies();
       setMovies(result);
-      setIsLoading(false)
-    } catch (error) {
-      setIsLoading(false)
-      setError(true)
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      setError(true);
     }
   }
 
@@ -30,7 +30,7 @@ function App() {
       {error && <p>Falha na requisição.. Tente novamente mais tarde</p>}
       {!error && <MovieList movies={movies} />}
     </>
-  )
+  );
 }
 
 export default App;
