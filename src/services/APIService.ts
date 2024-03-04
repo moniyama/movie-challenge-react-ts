@@ -23,7 +23,6 @@ const HTTPService = {
         }
         return response.results.map((movie: IMovieAPI) => formatMovie(movie));
       })
-      .catch((err) => console.error(err));
   },
 };
 
