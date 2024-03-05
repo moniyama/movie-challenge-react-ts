@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "jest --coverage --verbose",
+    "test": "jest --coverage --verbose --watch",
     "pretest": "eslint --fix src",
     "dev": "vite",
     "build": "tsc && vite build",
