@@ -18,11 +18,10 @@ const HTTPService = {
         if (
           Object.prototype.hasOwnProperty.call(response, "success") &&
           !response.success
-        ) {
+        )
           throw Error(response.status_message);
-        }
         return response.results.map((movie: IMovieAPI) => formatMovie(movie));
-      })
+      });
   },
 };
 

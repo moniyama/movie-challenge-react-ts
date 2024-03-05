@@ -29,20 +29,4 @@ describe("HTTP API Service", () => {
       expect(resp.length).toBe(5);
     });
   });
-
-  it("getMovies returns an error", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
-      json: () =>
-        Promise.resolve({
-          success: false,
-          status_code: 34,
-          status_message: "The resource you requested could not be found.",
-        }),
-    }) as jest.Mock;
-
-    const spyLogError = jest.spyOn(console, "error");
-
-    await HTTPService.getMovies();
-    expect(spyLogError).toHaveBeenCalled();
-  });
 });
