@@ -3,7 +3,7 @@ import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 
-function App() {
+function Home() {
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -33,4 +33,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
