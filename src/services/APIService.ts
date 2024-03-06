@@ -3,7 +3,9 @@ import tokenAPI from "../utils/constants";
 import { formatMovie } from "../utils/transformers";
 
 const HTTPService = {
-  getMovies: (props: IPagination): Promise<IPaginationResponse> => {
+  getMovies: (
+    props: IPagination = { filters: { page: 1 } },
+  ): Promise<IPaginationResponse> => {
     const { filters } = props;
 
     const options = {
