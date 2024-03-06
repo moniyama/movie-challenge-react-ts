@@ -11,8 +11,12 @@ function Home() {
   async function getMovies() {
     try {
       setIsLoading(true);
-      const result = await HTTPService.getMovies();
-      setMovies(result);
+      const result = await HTTPService.getMovies({
+        filters: {
+          page: 1,
+        },
+      });
+      setMovies(result.movies);
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);

@@ -1,9 +1,11 @@
-import { IMovie, IMovieAPI } from "../models/Movie";
+import { IMovieAPI, IPagination, IPaginationResponse } from "../models/Movie";
 import tokenAPI from "../utils/constants";
 import { formatMovie } from "../utils/transformers";
 
 const HTTPService = {
-  getMovies: (): Promise<IMovie[]> => {
+  getMovies: (props: IPagination): Promise<IPaginationResponse> => {
+    const { filters } = props;
+
     const options = {
       method: "GET",
       headers: {
@@ -12,7 +14,10 @@ const HTTPService = {
       },
     };
 
-    return fetch("https://api.themoviedb.org/3/discover/movie", options)
+    const query = `?page=${filters.page}`;
+    const url = `https://api.themoviedb.org/3/discover/movie${query}`;
+
+    return fetch(url, options)
       .then((response) => response.json())
       .then((response) => {
         if (
@@ -20,7 +25,18 @@ const HTTPService = {
           !response.success
         )
           throw Error(response.status_message);
-        return response.results.map((movie: IMovieAPI) => formatMovie(movie));
+
+        return {
+          metaData: {
+            pagination: {
+              currentPage: response.page,
+              totalPages: response.total_pages,
+            },
+          },
+          movies: response.results.map((movie: IMovieAPI) =>
+            formatMovie(movie),
+          ),
+        };
       });
   },
 };
