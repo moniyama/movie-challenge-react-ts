@@ -1,4 +1,4 @@
-import { IMovieAPI } from "../models/Movie";
+import { IMovieAPI, IPagination } from "../models/Movie";
 
 const filmesAPI: IMovieAPI[] = [
   {
@@ -88,5 +88,10 @@ const filmesAPI: IMovieAPI[] = [
   },
 ];
 
-const testes = "";
-export { filmesAPI, testes };
+const getMoviesServiceParameter: IPagination = {
+  filters: {
+    page: 3,
+  },
+};
+
+export { filmesAPI, getMoviesServiceParameter };
