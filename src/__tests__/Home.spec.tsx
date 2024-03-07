@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Home from "../components/pages/Home";
 import HTTPService from "../services/APIService";
 import { filmesAPI } from "../__mocks__/mocks";
@@ -6,15 +6,6 @@ import { filmesAPI } from "../__mocks__/mocks";
 jest.mock("../utils/constants", () => "token API");
 
 jest.spyOn(HTTPService, "getMovies");
-
-// const container: HTMLElement = document.createElement('div');
-// beforeEach(() => {
-//   document.body.appendChild(container);
-// });
-
-// afterEach(() => {
-//   document.body.removeChild(container);
-// });
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -32,16 +23,11 @@ describe("Home Page view", () => {
         }),
     }) as jest.Mock;
 
-    const { container } = render(<Home />);
+    const { findAllByRole } = render(<Home />);
 
-    await waitFor(() => {
-      expect(HTTPService.getMovies).toHaveBeenCalledTimes(1);
-      expect(container.querySelectorAll("li").length).toBe(5);
-      // expect(findAllByRole("li")).toHaveLength(5); // why not working
-    });
-
-    // expect(HTTPService.getMovies).toHaveBeenCalledTimes(1); // error de not wrapped in act
-    // expect(await findAllByRole("li")).toBe(5); // why not working
+    expect(await findAllByRole("list")).toHaveLength(1);
+    expect(await findAllByRole("listitem")).toHaveLength(5);
+    expect(HTTPService.getMovies).toHaveBeenCalledTimes(1);
   });
   test("Renders error", async () => {
     global.fetch = jest.fn().mockResolvedValueOnce({
@@ -55,10 +41,7 @@ describe("Home Page view", () => {
 
     const { findByText } = render(<Home />);
 
-    // expect(await findByText("Falha na requisição")).toBeTruthy();
-    await waitFor(() => {
-      expect(findByText("Falha na requisição..")).toBeTruthy();
-      expect(HTTPService.getMovies).toHaveBeenCalledTimes(1);
-    });
+    expect(await findByText(/Falha na requisição../)).toBeTruthy();
+    expect(HTTPService.getMovies).toHaveBeenCalledTimes(1);
   });
 });
