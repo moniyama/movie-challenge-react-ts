@@ -15,18 +15,17 @@ function Pagination({
   const [displayPages, setDisplayPages] = useState([
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
   ]);
+
   const createArrayPageToDisplay = (page: number) => {
     let newDisplay: number[] = displayPages;
     if (!newDisplay.includes(page)) {
       newDisplay = [];
       let index;
-
       if (page > displayPages[0]) {
-        index = page;
+        index = displayPages[9] + 1;
       } else {
         index = displayPages[0] - 10;
       }
-
       for (index; newDisplay.length < 10 && index <= totalPages; index += 1) {
         newDisplay.push(index);
       }
