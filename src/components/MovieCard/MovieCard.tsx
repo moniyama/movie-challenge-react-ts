@@ -6,7 +6,7 @@ function MovieCard({ movie }: { movie: IMovie }) {
   return (
     <li>
       <h1>{title}</h1>
-      <img src={poster} alt={"poster do filme " + title} />
+      <img src={poster} alt={`poster do filme ${title}`} />
       <p>{releaseYear}</p>
     </li>
   );
