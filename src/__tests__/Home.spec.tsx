@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, waitForElementToBeRemoved } from "@testing-library/react";
 import Home from "../components/pages/Home";
 import HTTPService from "../services/APIService";
 import { filmesAPI } from "../__mocks__/mocks";
@@ -23,7 +23,9 @@ describe("Home Page view", () => {
         }),
     }) as jest.Mock;
 
-    const { findAllByRole } = render(<Home />);
+    const { findAllByRole, queryByText } = render(<Home />);
+
+    await waitForElementToBeRemoved(() => queryByText(/carregando/))
 
     expect(await findAllByRole("list")).toHaveLength(1);
     expect(await findAllByRole("listitem")).toHaveLength(5);
