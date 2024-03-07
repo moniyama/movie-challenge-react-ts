@@ -1,12 +1,11 @@
 import { render } from "@testing-library/react";
 import MovieCard from "../components/MovieCard/MovieCard";
-import { formatMovie } from "../utils/transformers";
-import { filmesAPI } from "../__mocks__/mocks";
+import { transformedFilmes } from "../__mocks__/mocks";
 
 describe("Movie Card Component", () => {
   it("render component", async () => {
     const { findAllByRole, findAllByText, findByAltText } = render(
-      <MovieCard movie={formatMovie(filmesAPI[0])} />,
+      <MovieCard movie={transformedFilmes[0]} />,
     );
 
     expect(await findAllByRole("listitem")).toHaveLength(1);
