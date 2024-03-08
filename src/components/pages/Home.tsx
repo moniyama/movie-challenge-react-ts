@@ -1,21 +1,24 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import HTTPService from "../../services/APIService";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
-import { useQuery } from '@tanstack/react-query'
 
 function Home() {
   const [page, setPage] = useState({ current: 1, total: 1 });
 
   async function fetchMovies() {
-    return await HTTPService.getMovies({
+    return HTTPService.getMovies({
       filters: {
         page: page.current,
       },
     });
   }
 
-  const { isPending, isError, data, error } = useQuery({ queryKey: ['todos', page], queryFn: fetchMovies })
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["todos", page],
+    queryFn: fetchMovies,
+  });
 
   return (
     <>
