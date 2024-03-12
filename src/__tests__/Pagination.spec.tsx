@@ -155,7 +155,7 @@ describe("Pagination component", () => {
         />,
       );
 
-      const backwardBtn = await screen.findByText('<<');
+      const backwardBtn = await screen.findByText("<<");
       expect(backwardBtn).toBeInTheDocument();
       fireEvent.click(backwardBtn);
       expect(handleClick).toHaveBeenCalledWith({
@@ -176,7 +176,7 @@ describe("Pagination component", () => {
         />,
       );
 
-      const forwardBtn = await screen.findByText('>>');
+      const forwardBtn = await screen.findByText(">>");
       expect(forwardBtn).toBeInTheDocument();
       fireEvent.click(forwardBtn);
       expect(handleClick).toHaveBeenCalledWith({
