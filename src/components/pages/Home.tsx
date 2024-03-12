@@ -1,38 +1,61 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
 
-function Home() {
-  const [movies, setMovies] = useState<IMovie[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [page, setPage] = useState({ current: 1, total: 1 });
+interface IPageCount {
+  currentPage: number;
+  totalPages: number;
+}
 
-  async function getMovies() {
+function Home() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState<IPageCount>({
+    currentPage: Number(searchParams.get("page") || 1),
+    totalPages: 2,
+  });
+  const [movies, setMovies] = useState<IMovie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
+
+  async function getMovies(currentPage: number) {
     try {
       setIsLoading(true);
       const result = await HTTPService.getMovies({
         filters: {
-          page: 1,
+          page: currentPage,
         },
-      });
-      setPage({
-        current: result.metaData.pagination.currentPage,
-        total: result.metaData.pagination.totalPages,
       });
       setMovies(result.movies);
       setIsLoading(false);
+      return await Promise.resolve(result);
     } catch (err) {
       setIsLoading(false);
       setError(true);
+      return Promise.reject(err);
+    }
+  }
+
+  async function checkURL() {
+    const result = await getMovies(page.currentPage);
+    if (typeof result !== "undefined") {
+      setPage({
+        currentPage: result.metaData.pagination.currentPage,
+        totalPages: result.metaData.pagination.totalPages,
+      });
     }
   }
 
   useEffect(() => {
-    getMovies();
+    checkURL();
   }, []);
+
+  useEffect(() => {
+    setSearchParams(`page=${page.currentPage}`);
+    getMovies(page.currentPage);
+  }, [page.currentPage]);
 
   return (
     <>
@@ -42,9 +65,9 @@ function Home() {
         <>
           <MovieList movies={movies} />
           <Pagination
-            currentPage={page.current}
+            currentPage={page.currentPage}
             onSelectPage={setPage}
-            totalPages={page.total}
+            totalPages={page.totalPages}
           />
         </>
       )}

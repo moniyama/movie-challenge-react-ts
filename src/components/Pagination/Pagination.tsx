@@ -10,9 +10,9 @@ function Pagination({
   totalPages: number;
   onSelectPage: Function;
 }) {
-  const [hasPrevious, setHasPrevious] = useState(false);
-  const [hasNext, setHasNext] = useState(false);
-  const [displayPages, setDisplayPages] = useState([
+  const [hasPrevious, setHasPrevious] = useState<boolean>(false);
+  const [hasNext, setHasNext] = useState<boolean>(false);
+  const [displayPages, setDisplayPages] = useState<number[]>([
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
   ]);
 
@@ -58,7 +58,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ current: currentPage - 1, total: totalPages })
+            onSelectPage({ currentPage: currentPage - 1, totalPages })
           }
         >
           Anterior
@@ -68,7 +68,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ current: displayPages[0] - 10, total: totalPages })
+            onSelectPage({ currentPage: displayPages[0] - 10, totalPages })
           }
         >
           &lt;&lt;
@@ -83,7 +83,7 @@ function Pagination({
           onClick={(e) => {
             const { target } = e;
             const { value } = target as HTMLButtonElement;
-            onSelectPage({ current: Number(value), total: totalPages });
+            onSelectPage({ currentPage: Number(value), totalPages });
           }}
         >
           {item}
@@ -93,7 +93,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ current: displayPages[0] + 10, total: totalPages })
+            onSelectPage({ currentPage: displayPages[0] + 10, totalPages })
           }
         >
           &gt;&gt;
@@ -103,7 +103,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ current: currentPage + 1, total: totalPages })
+            onSelectPage({ currentPage: currentPage + 1, totalPages })
           }
         >
           Proximo
