@@ -25,7 +25,7 @@ describe("Home Page view", () => {
 
     const { findAllByRole, queryByText } = render(<Home />);
 
-    await waitForElementToBeRemoved(() => queryByText(/carregando/));
+    await waitForElementToBeRemoved(() => queryByText(/carregando/))
 
     expect(await findAllByRole("list")).toHaveLength(1);
     expect(await findAllByRole("listitem")).toHaveLength(5);

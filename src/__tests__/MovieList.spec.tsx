@@ -9,13 +9,13 @@ describe("MovieList component", () => {
   const { findAllByRole } = render(<MovieList movies={transformedFilmes} />);
 
   it("render ul & call Movie Card", async () => {
-    const ul = await findAllByRole("list");
+    const ul = await findAllByRole("list")
     expect(ul).toBeTruthy();
     expect(ul).toHaveLength(1);
-    expect(MovieCard).toHaveBeenCalledTimes(5);
+    expect(MovieCard).toHaveBeenCalledTimes(5)
   });
 
   it("call Movie Card components 5 times", async () => {
-    expect(MovieCard).toHaveBeenCalledTimes(5);
+    expect(MovieCard).toHaveBeenCalledTimes(5)
   });
 });
