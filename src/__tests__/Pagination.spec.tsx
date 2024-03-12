@@ -97,8 +97,8 @@ describe("Pagination component", () => {
       expect(anteriorBtn).toBeInTheDocument();
       fireEvent.click(anteriorBtn);
       expect(handleClick).toHaveBeenCalledWith({
-        current: pageToGo,
-        total: totalPages,
+        currentPage: pageToGo,
+        totalPages,
       });
     });
 
@@ -118,8 +118,8 @@ describe("Pagination component", () => {
       expect(proximoBtn).toBeInTheDocument();
       fireEvent.click(proximoBtn);
       expect(handleClick).toHaveBeenCalledWith({
-        current: pageToGo,
-        total: totalPages,
+        currentPage: pageToGo,
+        totalPages,
       });
     });
     it("clicks at another page Button", async () => {
@@ -138,8 +138,8 @@ describe("Pagination component", () => {
       expect(pageToGoBtn).toBeInTheDocument();
       fireEvent.click(pageToGoBtn);
       expect(handleClick).toHaveBeenCalledWith({
-        current: pageToGo,
-        total: totalPages,
+        currentPage: pageToGo,
+        totalPages,
       });
     });
 
@@ -159,8 +159,8 @@ describe("Pagination component", () => {
       expect(backwardBtn).toBeInTheDocument();
       fireEvent.click(backwardBtn);
       expect(handleClick).toHaveBeenCalledWith({
-        current: pageToGo,
-        total: totalPages,
+        currentPage: pageToGo,
+        totalPages,
       });
     });
 
@@ -180,8 +180,8 @@ describe("Pagination component", () => {
       expect(forwardBtn).toBeInTheDocument();
       fireEvent.click(forwardBtn);
       expect(handleClick).toHaveBeenCalledWith({
-        current: pageToGo,
-        total: totalPages,
+        currentPage: pageToGo,
+        totalPages,
       });
     });
   });
