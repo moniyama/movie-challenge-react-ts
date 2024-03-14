@@ -68,13 +68,16 @@ describe("Home Page view", () => {
       },
       movies: transformedFilmes,
     });
-    const { container, findByText, findByRole } = render(<Wrapper />);
-    
-    expect(await findByRole('button', { name: '3' })).toHaveClass("current-page");
-    console.log(container.innerHTML);
-    
+    const { findByText, findByRole } = render(<Wrapper />);
+
+    expect(await findByRole("button", { name: "3" })).toHaveClass(
+      "current-page",
+    );
+
     user.click(await findByText(/Proximo/)).then(async () => {
-      expect(await findByRole('button', { name: '4' })).toHaveClass("current-page");
-    })
+      expect(await findByRole("button", { name: "4" })).toHaveClass(
+        "current-page",
+      );
+    });
   });
 });

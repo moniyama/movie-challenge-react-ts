@@ -21,7 +21,6 @@ function Home() {
   const [error, setError] = useState<boolean>(false);
 
   async function getMovies(currentPage: number) {
-    console.log('getMovies')
     setError(false);
     setIsLoading(true);
     try {
@@ -34,7 +33,7 @@ function Home() {
       return await Promise.resolve(result);
     } catch (err) {
       setError(true);
-      return Promise.reject(err);
+      return await Promise.reject(err);
     } finally {
       setIsLoading(false);
     }
