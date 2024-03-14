@@ -18,9 +18,15 @@ function Pagination({
 
   const createArrayPageToDisplay = (page: number) => {
     let newDisplay: number[] = displayPages;
+    let index = 1;
+    if (totalPages < newDisplay[newDisplay.length - 1]) {
+      newDisplay = [];
+      for (index; index <= totalPages; index += 1) {
+        newDisplay.push(index);
+      }
+    }
     if (!newDisplay.includes(page)) {
       newDisplay = [];
-      let index;
       if (page > displayPages[0]) {
         index = displayPages[9] + 1;
       } else {
@@ -29,8 +35,9 @@ function Pagination({
       for (index; newDisplay.length < 10 && index <= totalPages; index += 1) {
         newDisplay.push(index);
       }
-      setDisplayPages(newDisplay);
     }
+    setDisplayPages(newDisplay);
+
     return displayPages;
   };
 
