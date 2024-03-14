@@ -22,6 +22,7 @@ function Home() {
 
   async function getMovies(currentPage: number) {
     try {
+      setError(false);
       setIsLoading(true);
       const result = await HTTPService.getMovies({
         filters: {
@@ -32,6 +33,7 @@ function Home() {
       setIsLoading(false);
       return await Promise.resolve(result);
     } catch (err) {
+      console.log(err);
       setIsLoading(false);
       setError(true);
       return Promise.reject(err);
@@ -60,8 +62,8 @@ function Home() {
   return (
     <>
       {isLoading ? <p>carregando...</p> : ""}
-      {error && <p>Falha na requisição.. Tente novamente mais tarde</p>}
-      {!isLoading && (
+      {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
+      {!!movies.length && (
         <>
           <MovieList movies={movies} />
           <Pagination

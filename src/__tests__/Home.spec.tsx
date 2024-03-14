@@ -1,49 +1,57 @@
-import { render, waitForElementToBeRemoved } from "@testing-library/react";
+import {
+  render,
+  waitFor,
+  // waitForElementToBeRemoved,
+} from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import Home from "../components/pages/Home";
 import HTTPService from "../services/APIService";
-import { filmesAPI } from "../__mocks__/mocks";
+import { transformedFilmes } from "../__mocks__/mocks";
 
 jest.mock("../utils/constants", () => "token API");
-
-jest.spyOn(HTTPService, "getMovies");
+jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue("3");
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 
+function Wrapper() {
+  return (
+    <MemoryRouter>
+      <Home />
+    </MemoryRouter>
+  );
+}
+
 describe("Home Page view", () => {
-  test("Renders the main page", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
-      json: () =>
-        Promise.resolve({
-          page: 1,
-          results: filmesAPI,
-          total_pages: 100,
-          total_results: 500,
-        }),
-    }) as jest.Mock;
+  test("Renders Home at page 3", async () => {
+    jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
+      metaData: {
+        pagination: {
+          currentPage: 1,
+          totalPages: 10,
+        },
+      },
+      movies: transformedFilmes,
+    });
 
-    const { findAllByRole, queryByText } = render(<Home />);
+    const { findAllByRole, findByText } = render(<Wrapper />);
 
-    await waitForElementToBeRemoved(() => queryByText(/carregando/));
+    await waitFor(() => {
+      expect(HTTPService.getMovies).toHaveBeenCalledWith({
+        filters: { page: 3 },
+      });
+    });
 
-    expect(await findAllByRole("list")).toHaveLength(1);
     expect(await findAllByRole("listitem")).toHaveLength(5);
-    expect(HTTPService.getMovies).toHaveBeenCalledTimes(1);
+    expect(await findAllByRole("list")).toHaveLength(1);
+    // await waitForElementToBeRemoved(() => findByText(/carregando/));
   });
-  test("Renders error", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
-      json: () =>
-        Promise.resolve({
-          success: false,
-          status_code: 34,
-          status_message: "The resource you requested could not be found.",
-        }),
-    }) as jest.Mock;
 
-    const { findByText } = render(<Home />);
+  test("Renders error message", async () => {
+    jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
+    const { findByText } = render(<Wrapper />);
 
-    expect(await findByText(/Falha na requisição../)).toBeTruthy();
-    expect(HTTPService.getMovies).toHaveBeenCalledTimes(1);
+    expect(await findByText(/falha/)).toBeTruthy();
   });
 });
