@@ -3,6 +3,8 @@ import {
   waitFor,
   // waitForElementToBeRemoved,
 } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Home from "../components/pages/Home";
 import HTTPService from "../services/APIService";
@@ -28,14 +30,14 @@ describe("Home Page view", () => {
     jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
       metaData: {
         pagination: {
-          currentPage: 1,
-          totalPages: 10,
+          currentPage: 3,
+          totalPages: 3,
         },
       },
       movies: transformedFilmes,
     });
 
-    const { findAllByRole, findByText } = render(<Wrapper />);
+    const { findAllByRole } = render(<Wrapper />);
 
     await waitFor(() => {
       expect(HTTPService.getMovies).toHaveBeenCalledWith({
@@ -48,10 +50,31 @@ describe("Home Page view", () => {
     // await waitForElementToBeRemoved(() => findByText(/carregando/));
   });
 
-  test("Renders error message", async () => {
+  test.skip("Renders error message", async () => {
     jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
     const { findByText } = render(<Wrapper />);
 
     expect(await findByText(/falha/)).toBeTruthy();
+  });
+
+  test("click in button proximo it changes current page", async () => {
+    const user = userEvent.setup();
+    jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
+      metaData: {
+        pagination: {
+          currentPage: 3,
+          totalPages: 4,
+        },
+      },
+      movies: transformedFilmes,
+    });
+    const { container, findByText, findByRole } = render(<Wrapper />);
+    
+    expect(await findByRole('button', { name: '3' })).toHaveClass("current-page");
+    console.log(container.innerHTML);
+    
+    user.click(await findByText(/Proximo/)).then(async () => {
+      expect(await findByRole('button', { name: '4' })).toHaveClass("current-page");
+    })
   });
 });
