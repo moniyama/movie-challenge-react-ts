@@ -14,29 +14,29 @@ function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = useState<IPageCount>({
     currentPage: Number(searchParams.get("page") || 1),
-    totalPages: 2,
+    totalPages: 1,
   });
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
   async function getMovies(currentPage: number) {
+    console.log('getMovies')
+    setError(false);
+    setIsLoading(true);
     try {
-      setError(false);
-      setIsLoading(true);
       const result = await HTTPService.getMovies({
         filters: {
           page: currentPage,
         },
       });
       setMovies(result.movies);
-      setIsLoading(false);
       return await Promise.resolve(result);
     } catch (err) {
-      console.log(err);
-      setIsLoading(false);
       setError(true);
       return Promise.reject(err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -63,7 +63,7 @@ function Home() {
     <>
       {isLoading ? <p>carregando...</p> : ""}
       {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
-      {!!movies.length && (
+      {!!movies.length && !error && (
         <>
           <MovieList movies={movies} />
           <Pagination
