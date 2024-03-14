@@ -26,8 +26,7 @@ const HTTPService = {
           Object.prototype.hasOwnProperty.call(response, "success") &&
           !response.success
         )
-          throw Error(response.status_message);
-
+          return Promise.reject(response);
         return {
           metaData: {
             pagination: {
