@@ -40,3 +40,8 @@ export interface IPagination {
     page: number;
   };
 }
+
+export interface IMovieGenre {
+  id: number;
+  name: string;
+}
