@@ -1,4 +1,4 @@
-import { IMovie, IMovieAPI } from "../models/Movie";
+import { IMovie, IMovieAPI, IMovieGenre } from "../models/Movie";
 
 function formatMovie(movie: IMovieAPI): IMovie {
   const { title, id, overview } = movie;
@@ -16,8 +16,14 @@ function formatMovie(movie: IMovieAPI): IMovie {
   return result;
 }
 
-function banana() {
-  console.log("banana");
+function formatGenresToMap(arr: IMovieGenre[] = []) {
+  let arrToBeMapped: [number, string][] = [];
+  if (arr.length) {
+    arrToBeMapped = arr.map((item) => [item.id, item.name]);
+  }
+
+  // const arrToBeMapped = arr.map(Object.values)  // WHY doesnt work
+  return new Map(arrToBeMapped);
 }
 
-export { formatMovie, banana };
+export { formatMovie, formatGenresToMap };
