@@ -1,7 +1,13 @@
-import { filmesAPI } from "../__mocks__/mocks";
-import { formatGenresToMap, formatMovie } from "./transformers";
+import { filmesAPI, movieGenderResponse } from "../__mocks__/mocks";
+import {
+  formatGenresToMap,
+  formatMovie,
+  formatGenresToOptions,
+} from "./transformers";
 
-describe.skip("formatMovie utils function", () => {
+jest.mock("../utils/constants", () => "token API");
+
+describe("formatMovie utils function", () => {
   it("returns object transformed", () => {
     const movie = formatMovie(filmesAPI[0], new Map([[28, "Ação"]]));
     expect(movie.title).toBe("Badland Hunters");
@@ -26,5 +32,25 @@ describe.skip("formatGenresToMap utils function", () => {
     expect(map.has(28)).toBeFalsy();
     expect(map.has(35)).toBeFalsy();
     expect(map.has(18)).toBeFalsy();
+  });
+});
+
+describe("formatGenresToOptions utils function", () => {
+  it("returns array with label & value", async () => {
+    expect(formatGenresToOptions(movieGenderResponse)[0]).toEqual({
+      value: 28,
+      label: "Ação",
+    });
+    expect(formatGenresToOptions(movieGenderResponse)[1]).toEqual({
+      value: 35,
+      label: "Comédia",
+    });
+    expect(formatGenresToOptions(movieGenderResponse)[2]).toEqual({
+      value: 18,
+      label: "Drama",
+    });
+  });
+  it("returns empty new Map when function invoked without params", async () => {
+    expect(formatGenresToOptions([])).toEqual([]);
   });
 });

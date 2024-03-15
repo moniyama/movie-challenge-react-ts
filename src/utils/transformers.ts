@@ -1,9 +1,8 @@
-import { IMovie, IMovieAPI } from "../models/Movie";
+import { IMovie, IMovieAPI, IMovieGenre } from "../models/Movie";
 import MovieService from "../services/MovieService";
 
 function formatMovie(movie: IMovieAPI, genres: Map<number, string>): IMovie {
   const { title, id, overview } = movie;
-
 
   const result = {
     id,
@@ -13,15 +12,15 @@ function formatMovie(movie: IMovieAPI, genres: Map<number, string>): IMovie {
     overview,
     voteAverage: movie.vote_average,
     language: movie.original_language,
-    genre: [...genres.values()]
+    genre: [...genres.values()],
   };
 
   return result;
 }
 
 async function formatGenresToMap(arr: number[] = []) {
-  const result = await MovieService.getMovieGenre()
-  const movieList = result.filter(item => arr.includes(item.id))
+  const result = await MovieService.getMovieGenre();
+  const movieList = result.filter((item) => arr.includes(item.id));
 
   let arrToBeMapped: [number, string][] = [];
   if (arr.length) {
@@ -31,4 +30,8 @@ async function formatGenresToMap(arr: number[] = []) {
   return new Map(arrToBeMapped);
 }
 
-export { formatMovie, formatGenresToMap };
+function formatGenresToOptions(arr: IMovieGenre[] = []) {
+  return arr.map((item) => ({ value: item.id, label: item.name }));
+}
+
+export { formatMovie, formatGenresToMap, formatGenresToOptions };
