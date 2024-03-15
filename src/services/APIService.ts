@@ -1,11 +1,10 @@
 import {
   IMovieAPI,
-  IMovieGenre,
   IPagination,
   IPaginationResponse,
 } from "../models/Movie";
 import tokenAPI from "../utils/constants";
-import { formatMovie } from "../utils/transformers";
+import { formatGenresToMap, formatMovie } from "../utils/transformers";
 
 const options = {
   method: "GET",
@@ -26,12 +25,17 @@ const HTTPService = {
 
     return fetch(url, options)
       .then((response) => response.json())
-      .then((response) => {
+      .then(async (response) => {
         if (
           Object.prototype.hasOwnProperty.call(response, "success") &&
           !response.success
         )
           return Promise.reject(response);
+
+        const movies = await Promise.all(response.results.map(async (movie: IMovieAPI) =>
+          formatMovie(movie, await formatGenresToMap(movie.genre_ids))
+        ))
+
         return {
           metaData: {
             pagination: {
@@ -39,25 +43,8 @@ const HTTPService = {
               totalPages: response.total_pages,
             },
           },
-          movies: response.results.map((movie: IMovieAPI) =>
-            formatMovie(movie),
-          ),
+          movies
         };
-      });
-  },
-
-  getMovieGenre: (): Promise<IMovieGenre[]> => {
-    const url = `https://api.themoviedb.org/3/discover/genre/movie/list`;
-    return fetch(url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (
-          Object.prototype.hasOwnProperty.call(response, "success") &&
-          !response.success
-        )
-          return Promise.reject(response);
-        return response.genre;
       });
   },
 };
