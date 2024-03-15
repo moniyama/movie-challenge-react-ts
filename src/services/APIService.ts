@@ -1,8 +1,4 @@
-import {
-  IMovieAPI,
-  IPagination,
-  IPaginationResponse,
-} from "../models/Movie";
+import { IMovieAPI, IPagination, IPaginationResponse } from "../models/Movie";
 import tokenAPI from "../utils/constants";
 import { formatGenresToMap, formatMovie } from "../utils/transformers";
 
@@ -32,9 +28,11 @@ const HTTPService = {
         )
           return Promise.reject(response);
 
-        const movies = await Promise.all(response.results.map(async (movie: IMovieAPI) =>
-          formatMovie(movie, await formatGenresToMap(movie.genre_ids))
-        ))
+        const movies = await Promise.all(
+          response.results.map(async (movie: IMovieAPI) =>
+            formatMovie(movie, await formatGenresToMap(movie.genre_ids)),
+          ),
+        );
 
         return {
           metaData: {
@@ -43,7 +41,7 @@ const HTTPService = {
               totalPages: response.total_pages,
             },
           },
-          movies
+          movies,
         };
       });
   },

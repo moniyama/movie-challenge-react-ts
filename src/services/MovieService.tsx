@@ -1,6 +1,4 @@
-import {
-  IMovieGenre,
-} from "../models/Movie";
+import { IMovieGenre } from "../models/Movie";
 import tokenAPI from "../utils/constants";
 
 const options = {
@@ -22,7 +20,7 @@ const MovieService = {
           !response.success
         )
           return Promise.reject(response);
-        return response.genres
+        return response.genres;
       });
   },
 };

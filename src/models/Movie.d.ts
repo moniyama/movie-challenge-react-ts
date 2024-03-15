@@ -6,7 +6,7 @@ export interface IMovie {
   overview: string;
   voteAverage: number;
   language: string;
-  genre: string[]
+  genre: string[];
 }
 
 export interface IMovieAPI {
