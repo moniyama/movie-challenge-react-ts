@@ -1,6 +1,7 @@
 import {
   render,
   waitFor,
+  screen,
   // waitForElementToBeRemoved,
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -50,11 +51,23 @@ describe("Home Page view", () => {
     // await waitForElementToBeRemoved(() => findByText(/carregando/));
   });
 
-  test.skip("Renders error message", async () => {
+  test.only("Renders error message", async () => {
     jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
-    const { findByText } = render(<Wrapper />);
-
-    expect(await findByText(/falha/)).toBeTruthy();
+    /*jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
+      metaData: {
+        pagination: {
+          currentPage: 3,
+          totalPages: 4,
+        },
+      },
+      movies: transformedFilmes,
+    });*/
+    const { getByText } = render(<Wrapper />);
+    await waitFor( () => {
+      const message = getByText('Ops.. Ocorreu uma falha! Tente novamente mais tarde')
+      expect(message).toBeInTheDocument();
+      screen.debug(message)
+    });
   });
 
   test("click in button proximo it changes current page", async () => {

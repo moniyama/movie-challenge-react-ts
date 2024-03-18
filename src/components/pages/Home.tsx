@@ -12,10 +12,8 @@ interface IPageCount {
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState<IPageCount>({
-    currentPage: Number(searchParams.get("page") || 1),
-    totalPages: 1,
-  });
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -30,33 +28,25 @@ function Home() {
         },
       });
       setMovies(result.movies);
-      return await Promise.resolve(result);
+      return result;
     } catch (err) {
       setError(true);
-      return await Promise.reject(err);
+      return undefined;
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function checkURL() {
-    const result = await getMovies(page.currentPage);
+  async function checkURL(currentPage) {
+    const result = await getMovies(currentPage);
     if (typeof result !== "undefined") {
-      setPage({
-        currentPage: result.metaData.pagination.currentPage,
-        totalPages: result.metaData.pagination.totalPages,
-      });
+      setTotalPages(result.metaData.pagination.currentPage);
     }
   }
 
   useEffect(() => {
-    checkURL();
-  }, []);
-
-  useEffect(() => {
-    setSearchParams(`page=${page.currentPage}`);
-    getMovies(page.currentPage);
-  }, [page.currentPage]);
+    checkURL(currentPage);
+  }, [currentPage]);
 
   return (
     <>
@@ -66,9 +56,9 @@ function Home() {
         <>
           <MovieList movies={movies} />
           <Pagination
-            currentPage={page.currentPage}
-            onSelectPage={setPage}
-            totalPages={page.totalPages}
+            currentPage={currentPage}
+            onSelectPage={setCurrentPage}
+            totalPages={totalPages}
           />
         </>
       )}
