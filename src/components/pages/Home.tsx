@@ -4,6 +4,7 @@ import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
+import { formatGenresToMap } from "../../utils/transformers";
 
 interface IPageCount {
   currentPage: number;
@@ -17,8 +18,9 @@ function Home() {
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  let genresMap = null;
 
-  async function getMovies(currentPage: number) {
+  async function getMovies(currentPage: number, map) {
     setError(false);
     setIsLoading(true);
     try {
@@ -26,7 +28,8 @@ function Home() {
         filters: {
           page: currentPage,
         },
-      });
+      },
+      map);
       setMovies(result.movies);
       return result;
     } catch (err) {
@@ -37,13 +40,21 @@ function Home() {
     }
   }
 
+  async function getGenres(){
+    return await HTTPService.getMovieGenres();
+  }
+
   async function checkURL(currentPage) {
-    const result = await getMovies(currentPage);
+    if(!genresMap){
+      const genresAPI = await getGenres();
+      genresMap = formatGenresToMap(genresAPI);
+    }
+    const result = await getMovies(currentPage, genresMap);
     if (typeof result !== "undefined") {
       setTotalPages(result.metaData.pagination.currentPage);
     }
   }
-
+  
   useEffect(() => {
     checkURL(currentPage);
   }, [currentPage]);

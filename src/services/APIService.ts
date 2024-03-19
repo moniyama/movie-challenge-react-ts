@@ -5,6 +5,7 @@ import { formatMovie } from "../utils/transformers";
 const HTTPService = {
   getMovies: (
     props: IPagination = { filters: { page: 1 } },
+    map,
   ): Promise<IPaginationResponse> => {
     const { filters } = props;
 
@@ -35,7 +36,7 @@ const HTTPService = {
             },
           },
           movies: response.results.map((movie: IMovieAPI) =>
-            formatMovie(movie),
+            formatMovie(movie, map),
           ),
         };
       });
