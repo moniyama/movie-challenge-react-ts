@@ -4,7 +4,8 @@ import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
-import { formatGenresToMap } from "../../utils/transformers";
+import { formatGenresToMap, formatGenresToOptions } from "../../utils/transformers";
+import ListOptions from "../ListOptions/ListOptions";
 
 interface IPageCount {
   currentPage: number;
@@ -18,8 +19,9 @@ function Home() {
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  let genresMap = null;
-
+  let genresMap = new Map();
+  const [genresOptions, setGenresOptions] = useState([]);
+  
   async function getMovies(currentPage: number, map) {
     setError(false);
     setIsLoading(true);
@@ -45,9 +47,10 @@ function Home() {
   }
 
   async function checkURL(currentPage) {
-    if(!genresMap){
+    if(genresMap.size === 0){
       const genresAPI = await getGenres();
       genresMap = formatGenresToMap(genresAPI);
+      setGenresOptions(formatGenresToOptions(genresAPI));
     }
     const result = await getMovies(currentPage, genresMap);
     if (typeof result !== "undefined") {
@@ -65,6 +68,9 @@ function Home() {
       {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
       {!!movies.length && !error && (
         <>
+          <section>
+           <ListOptions options={genresOptions} onChange={()=>{}} onClear={() => {}}></ListOptions>
+          </section>
           <MovieList movies={movies} />
           <Pagination
             currentPage={currentPage}
