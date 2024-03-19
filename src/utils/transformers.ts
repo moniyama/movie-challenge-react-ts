@@ -20,4 +20,11 @@ function banana() {
   console.log("banana");
 }
 
-export { formatMovie, banana };
+
+const formatGenresToMap = (genres) => {
+  return new Map(
+    genres.map(genre => [genre.id, genre.name])
+  );
+}
+
+export { formatMovie, banana, formatGenresToMap };
