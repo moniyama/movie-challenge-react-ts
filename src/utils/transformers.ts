@@ -28,4 +28,8 @@ const formatGenresToMap = (genres) => {
   );
 }
 
-export { formatMovie, banana, formatGenresToMap };
+const formatGenresToOptions = (genres) => {
+  return genres.map(genre => ({value: genre.id, label: genre.name}));
+}
+
+export { formatMovie, banana, formatGenresToMap, formatGenresToOptions };
