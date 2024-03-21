@@ -19,16 +19,24 @@ function Pagination({
   const createArrayPageToDisplay = (page: number) => {
     let newDisplay: number[] = displayPages;
     let index = 1;
-    if (totalPages < newDisplay[newDisplay.length - 1]) {
+    const hasMoreDisplayedPagesThanTotalPages =
+      totalPages < newDisplay[newDisplay.length - 1];
+    const displayedPagesContainsPage = newDisplay.includes(page);
+    if (hasMoreDisplayedPagesThanTotalPages) {
       newDisplay = [];
       for (index; index <= totalPages; index += 1) {
         newDisplay.push(index);
       }
     }
-    if (!newDisplay.includes(page)) {
+
+    if (!displayedPagesContainsPage) {
       newDisplay = [];
-      if (page > displayPages[0]) {
+      const pageIsHigher = page > displayPages[0];
+      if (pageIsHigher) {
         index = displayPages[9] + 1;
+        while (index + 10 < page) {
+          index += 10;
+        }
       } else {
         index = displayPages[0] - 10;
       }

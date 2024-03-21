@@ -96,10 +96,7 @@ describe("Pagination component", () => {
       const anteriorBtn = await screen.findByText("Anterior");
       expect(anteriorBtn).toBeInTheDocument();
       fireEvent.click(anteriorBtn);
-      expect(handleClick).toHaveBeenCalledWith({
-        currentPage: pageToGo,
-        totalPages,
-      });
+      expect(handleClick).toHaveBeenCalledWith(pageToGo);
     });
 
     it("clicks at Proximo Button", async () => {
@@ -117,10 +114,7 @@ describe("Pagination component", () => {
       const proximoBtn = await screen.findByText("Proximo");
       expect(proximoBtn).toBeInTheDocument();
       fireEvent.click(proximoBtn);
-      expect(handleClick).toHaveBeenCalledWith({
-        currentPage: pageToGo,
-        totalPages,
-      });
+      expect(handleClick).toHaveBeenCalledWith(pageToGo);
     });
     it("clicks at another page Button", async () => {
       const currentPage = 11;
@@ -137,10 +131,7 @@ describe("Pagination component", () => {
       const pageToGoBtn = await screen.findByText(pageToGo);
       expect(pageToGoBtn).toBeInTheDocument();
       fireEvent.click(pageToGoBtn);
-      expect(handleClick).toHaveBeenCalledWith({
-        currentPage: pageToGo,
-        totalPages,
-      });
+      expect(handleClick).toHaveBeenCalledWith(pageToGo);
     });
 
     it("clicks at << page Button", async () => {
@@ -158,10 +149,7 @@ describe("Pagination component", () => {
       const backwardBtn = await screen.findByText("<<");
       expect(backwardBtn).toBeInTheDocument();
       fireEvent.click(backwardBtn);
-      expect(handleClick).toHaveBeenCalledWith({
-        currentPage: pageToGo,
-        totalPages,
-      });
+      expect(handleClick).toHaveBeenCalledWith(pageToGo);
     });
 
     it("clicks at >> page Button", async () => {
@@ -179,10 +167,7 @@ describe("Pagination component", () => {
       const forwardBtn = await screen.findByText(">>");
       expect(forwardBtn).toBeInTheDocument();
       fireEvent.click(forwardBtn);
-      expect(handleClick).toHaveBeenCalledWith({
-        currentPage: pageToGo,
-        totalPages,
-      });
+      expect(handleClick).toHaveBeenCalledWith(pageToGo);
     });
   });
 });
