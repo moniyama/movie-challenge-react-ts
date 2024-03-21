@@ -62,21 +62,14 @@ function Pagination({
   return (
     <div>
       {hasPrevious && (
-        <button
-          type="button"
-          onClick={() =>
-            onSelectPage(currentPage - 1)
-          }
-        >
+        <button type="button" onClick={() => onSelectPage(currentPage - 1)}>
           Anterior
         </button>
       )}
       {!displayPages.includes(1) && ( // NOT NEEDED?
         <button
           type="button"
-          onClick={() =>
-            onSelectPage(displayPages[0] - 10)
-          }
+          onClick={() => onSelectPage(displayPages[0] - 10)}
         >
           &lt;&lt;
         </button>
@@ -99,20 +92,13 @@ function Pagination({
       {!displayPages.includes(totalPages) && ( // NOT NEEDED?
         <button
           type="button"
-          onClick={() =>
-            onSelectPage(displayPages[0] + 10)
-          }
+          onClick={() => onSelectPage(displayPages[0] + 10)}
         >
           &gt;&gt;
         </button>
       )}
       {hasNext && (
-        <button
-          type="button"
-          onClick={() =>
-            onSelectPage(currentPage + 1)
-          }
-        >
+        <button type="button" onClick={() => onSelectPage(currentPage + 1)}>
           Proximo
         </button>
       )}

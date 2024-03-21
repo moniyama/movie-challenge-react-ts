@@ -12,7 +12,9 @@ const options = {
 
 const HTTPService = {
   getMovies: (
-    props: IPagination = { filters: { page: 1 } }, map: Map<number, string>): Promise<IPaginationResponse> => {
+    props: IPagination,
+    map: Map<number, string>,
+  ): Promise<IPaginationResponse> => {
     const { filters } = props;
 
     const query = `?page=${filters.page}`;
