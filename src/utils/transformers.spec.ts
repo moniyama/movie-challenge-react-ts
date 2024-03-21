@@ -17,16 +17,16 @@ describe("formatMovie utils function", () => {
   });
 });
 
-describe.skip("formatGenresToMap utils function", () => {
-  it("returns new Map called with values of 28, 35 and 18 in sequence", async () => {
-    const iterator = (await formatGenresToMap([25])).keys();
+describe("formatGenresToMap utils function", () => {
+  it("returns new Map called with values of 28, 35 and 18 in sequence", () => {
+    const iterator = formatGenresToMap(movieGenderResponse).keys();
 
     expect(iterator.next().value).toEqual(28);
     expect(iterator.next().value).toEqual(35);
     expect(iterator.next().value).toEqual(18);
   });
-  it("returns empty new Map when function invoked without params", async () => {
-    const map = await formatGenresToMap();
+  it("returns empty new Map when function invoked without params", () => {
+    const map = formatGenresToMap();
     const iterator = map.keys();
     expect(iterator.next().value).toEqual(undefined);
     expect(map.has(28)).toBeFalsy();
