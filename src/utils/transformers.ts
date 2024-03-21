@@ -18,14 +18,12 @@ function formatMovie(movie: IMovieAPI, genres: Map<number, string>): IMovie {
   return result;
 }
 
-async function formatGenresToMap(arr: number[] = []) {
-  const result = await MovieService.getMovieGenre();
-  const movieList = result.filter((item) => arr.includes(item.id));
-
+function formatGenresToMap(arr: IMovieGenre[] = []) {
   let arrToBeMapped: [number, string][] = [];
   if (arr.length) {
-    arrToBeMapped = movieList.map((item) => [item.id, item.name]);
+    arrToBeMapped = arr.map((item) => [item.id, item.name]);
   }
+
   // const arrToBeMapped = arr.map(Object.values)  // WHY doesnt work
   return new Map(arrToBeMapped);
 }
