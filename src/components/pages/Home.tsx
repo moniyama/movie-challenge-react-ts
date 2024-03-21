@@ -20,17 +20,20 @@ function Home() {
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  let genresMap:  Map<number, string> = new Map();
+  let genresMap: Map<number, string> = new Map();
 
   async function getMovies(currentPage: number, map: Map<number, string>) {
     setError(false);
     setIsLoading(true);
     try {
-      const result = await HTTPService.getMovies({
-        filters: {
-          page: currentPage,
+      const result = await HTTPService.getMovies(
+        {
+          filters: {
+            page: currentPage,
+          },
         },
-      }, map);
+        map,
+      );
       setMovies(result.movies);
       return result;
     } catch (err) {
@@ -42,18 +45,19 @@ function Home() {
   }
 
   async function getGenres() {
-    return await MovieService.getMovieGenre()
+    return await MovieService.getMovieGenre();
   }
 
   async function checkURL(currentPage: number) {
-    if(!genresMap.size) {
-      const genres = await getGenres()
-      genresMap = formatGenresToMap(genres)
+    if (!genresMap.size) {
+      const genres = await getGenres();
+      genresMap = formatGenresToMap(genres);
     }
 
     const result = await getMovies(currentPage, genresMap);
     if (typeof result !== "undefined") {
-      setTotalPages(result.metaData.pagination.totalPages)
+      console.log(totalPages)
+      setTotalPages(result.metaData.pagination.totalPages);
     }
   }
 
@@ -73,17 +77,21 @@ function Home() {
       {!!movies.length && !error && (
         <>
           <ListOptions
-            options={[{ value: 2, label: "Ação" }, { value: 32, label: "Comédia" }, { value: 4, label: "Drama" }]}
+            options={[
+              { value: 2, label: "Ação" },
+              { value: 32, label: "Comédia" },
+              { value: 4, label: "Drama" },
+            ]}
             selectedOption={{ value: 2, label: "Ação" }}
-            onChange={() => { }}
-            onClear={() => { }}
-          ></ListOptions>
+            onChange={() => {}}
+            onClear={() => {}}
+          />
           <MovieList movies={movies} />
-          {/* <Pagination
+          <Pagination
             currentPage={currentPage}
             onSelectPage={setCurrentPage}
             totalPages={totalPages}
-          /> */}
+          />
         </>
       )}
     </>

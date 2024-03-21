@@ -57,7 +57,7 @@ function Pagination({
   useEffect(() => {
     updateButtonsState();
     createArrayPageToDisplay(currentPage);
-  }, [currentPage, displayPages]);
+  }, [currentPage, totalPages]);
 
   return (
     <div>
@@ -65,7 +65,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ currentPage: currentPage - 1, totalPages })
+            onSelectPage(currentPage - 1)
           }
         >
           Anterior
@@ -75,7 +75,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ currentPage: displayPages[0] - 10, totalPages })
+            onSelectPage(displayPages[0] - 10)
           }
         >
           &lt;&lt;
@@ -90,7 +90,7 @@ function Pagination({
           onClick={(e) => {
             const { target } = e;
             const { value } = target as HTMLButtonElement;
-            onSelectPage({ currentPage: Number(value), totalPages });
+            onSelectPage(Number(value));
           }}
         >
           {item}
@@ -100,7 +100,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ currentPage: displayPages[0] + 10, totalPages })
+            onSelectPage(displayPages[0] + 10)
           }
         >
           &gt;&gt;
@@ -110,7 +110,7 @@ function Pagination({
         <button
           type="button"
           onClick={() =>
-            onSelectPage({ currentPage: currentPage + 1, totalPages })
+            onSelectPage(currentPage + 1)
           }
         >
           Proximo
