@@ -4,6 +4,7 @@ import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
+import ListOptions from "../ListOptions/ListOptions";
 
 interface IPageCount {
   currentPage: number;
@@ -64,6 +65,12 @@ function Home() {
       {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
       {!!movies.length && !error && (
         <>
+          <ListOptions
+            options={[{ value: 2, label: "Ação" }, { value: 32, label: "Comédia" }, { value: 4, label: "Drama" }]}
+            selectedOption= {{ value: 2, label: "Ação" }}
+            onChange={() => {}}
+            onClear={() => {}}
+          ></ListOptions>
           <MovieList movies={movies} />
           <Pagination
             currentPage={page.currentPage}
