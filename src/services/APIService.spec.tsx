@@ -21,7 +21,12 @@ const options = {
   method: "GET",
 };
 
-describe.skip("HTTP API Service - getMovies", () => {
+const map = new Map();
+map.set(28, "acao");
+map.set(35, "comedia");
+map.set(18, "drama");
+
+describe("HTTP API Service - getMovies", () => {
   it("getMovies returns an object with array of movies", () => {
     global.fetch = jest.fn().mockResolvedValueOnce({
       json: () =>
@@ -33,34 +38,31 @@ describe.skip("HTTP API Service - getMovies", () => {
         }),
     }) as jest.Mock;
 
-    HTTPService.getMovies(getMoviesServiceParameter).then((resp) => {
-      console.log(resp);
-      // expect(resp.movies).not.toBeNull();
-      // expect(resp.movies.length).toBe(5);
-      // expect(resp.movies[0].id).toBe(933131);
-      // expect(global.fetch).toHaveBeenCalledWith(
-      // "https://api.themoviedb.org/3/discover/movie?page=3",
-      // options,
-      // );
-      // expect(formatGenresToMap).toHaveBeenCalledTimes(5);
+    HTTPService.getMovies(getMoviesServiceParameter, map).then((resp) => {
+      expect(resp.movies).not.toBeNull();
+      expect(resp.movies.length).toBe(5);
+      expect(resp.movies[0].id).toBe(933131);
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.themoviedb.org/3/discover/movie?page=3",
+        options,
+      );
     });
   });
 
-  it.skip("getMovies returns an object with page 1 when invoked without parameters", () => {
+  it("getMovies error case", () => {
     global.fetch = jest.fn().mockResolvedValueOnce({
       json: () =>
         Promise.resolve({
-          page: 1,
-          results: filmesAPI,
-          total_pages: 100,
-          total_results: 500,
+          success: false,
         }),
     }) as jest.Mock;
 
-    HTTPService.getMovies().then((resp) => {
-      expect(resp.movies.length).toBe(5);
+    HTTPService.getMovies(getMoviesServiceParameter, map).catch((resp) => {
+      expect(resp).toEqual({
+        success: false,
+      });
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.themoviedb.org/3/discover/movie?page=1",
+        "https://api.themoviedb.org/3/discover/movie?page=3",
         options,
       );
     });
