@@ -21,7 +21,6 @@ function formatGenresToMap(arr: IMovieGenre[] = []) {
   if (arr.length) {
     arrToBeMapped = arr.map((item) => [item.id, item.name]);
   }
-
   // const arrToBeMapped = arr.map(Object.values)  // WHY doesnt work
   return new Map(arrToBeMapped);
 }

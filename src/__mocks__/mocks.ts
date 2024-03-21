@@ -158,17 +158,9 @@ const movieGenderResponse: IMovieGenre[] = [
   { id: 18, name: "Drama" },
 ];
 
-const transformedGenderMapParam = [
-  [
-    [28, "Ação"],
-    [35, "Comédia"],
-    [18, "Drama"],
-  ],
-];
 export {
   filmesAPI,
   getMoviesServiceParameter,
   transformedFilmes,
   movieGenderResponse,
-  transformedGenderMapParam,
 };

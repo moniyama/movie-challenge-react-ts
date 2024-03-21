@@ -28,7 +28,9 @@ function ListOptions({
           </option>
         ))}
       </select>
-      <button onClick={() => onClear()}>Limpar</button>
+      <button type="button" onClick={() => onClear()}>
+        Limpar
+      </button>
     </>
   );
 }
