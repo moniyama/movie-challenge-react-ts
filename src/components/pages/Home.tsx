@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import HTTPService from "../../services/APIService";
-import { IMovie } from "../../models/Movie";
+import { IMovie, IMovieGenre } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
 import ListOptions from "../ListOptions/ListOptions";
+import { formatGenresToMap } from "../../utils/transformers";
+import MovieService from "../../services/MovieService";
 
 interface IPageCount {
   currentPage: number;
@@ -13,15 +15,14 @@ interface IPageCount {
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState<IPageCount>({
-    currentPage: Number(searchParams.get("page") || 1),
-    totalPages: 1,
-  });
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  let genresMap:  Map<number, string> = new Map();
 
-  async function getMovies(currentPage: number) {
+  async function getMovies(currentPage: number, map: Map<number, string>) {
     setError(false);
     setIsLoading(true);
     try {
@@ -29,35 +30,41 @@ function Home() {
         filters: {
           page: currentPage,
         },
-      });
+      }, map);
       setMovies(result.movies);
-      return await Promise.resolve(result);
+      return result;
     } catch (err) {
       setError(true);
-      return await Promise.reject(err);
+      return undefined;
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function checkURL() {
-    const result = await getMovies(page.currentPage);
+  async function getGenres() {
+    return await MovieService.getMovieGenre()
+  }
+
+  async function checkURL(currentPage: number) {
+    if(!genresMap.size) {
+      const genres = await getGenres()
+      genresMap = formatGenresToMap(genres)
+    }
+
+    const result = await getMovies(currentPage, genresMap);
     if (typeof result !== "undefined") {
-      setPage({
-        currentPage: result.metaData.pagination.currentPage,
-        totalPages: result.metaData.pagination.totalPages,
-      });
+      setTotalPages(result.metaData.pagination.totalPages)
     }
   }
 
   useEffect(() => {
-    checkURL();
+    checkURL(currentPage);
   }, []);
 
   useEffect(() => {
-    setSearchParams(`page=${page.currentPage}`);
-    getMovies(page.currentPage);
-  }, [page.currentPage]);
+    setSearchParams(`page=${currentPage}`);
+    getMovies(currentPage, genresMap);
+  }, [currentPage]);
 
   return (
     <>
@@ -67,16 +74,16 @@ function Home() {
         <>
           <ListOptions
             options={[{ value: 2, label: "Ação" }, { value: 32, label: "Comédia" }, { value: 4, label: "Drama" }]}
-            selectedOption= {{ value: 2, label: "Ação" }}
-            onChange={() => {}}
-            onClear={() => {}}
+            selectedOption={{ value: 2, label: "Ação" }}
+            onChange={() => { }}
+            onClear={() => { }}
           ></ListOptions>
           <MovieList movies={movies} />
-          <Pagination
-            currentPage={page.currentPage}
-            onSelectPage={setPage}
-            totalPages={page.totalPages}
-          />
+          {/* <Pagination
+            currentPage={currentPage}
+            onSelectPage={setCurrentPage}
+            totalPages={totalPages}
+          /> */}
         </>
       )}
     </>

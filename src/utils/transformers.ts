@@ -1,9 +1,7 @@
 import { IMovie, IMovieAPI, IMovieGenre } from "../models/Movie";
-import MovieService from "../services/MovieService";
 
 function formatMovie(movie: IMovieAPI, genres: Map<number, string>): IMovie {
-  const { title, id, overview } = movie;
-
+  const { title = "", id = 1, overview = "" } = movie;
   const result = {
     id,
     title,
@@ -12,7 +10,7 @@ function formatMovie(movie: IMovieAPI, genres: Map<number, string>): IMovie {
     overview,
     voteAverage: movie.vote_average,
     language: movie.original_language,
-    genre: [...genres.values()],
+    genre: movie.genre_ids.map(id => genres.get(id) || ""),
   };
 
   return result;

@@ -1,6 +1,6 @@
 import { IMovieAPI, IPagination, IPaginationResponse } from "../models/Movie";
 import tokenAPI from "../utils/constants";
-import { formatGenresToMap, formatMovie } from "../utils/transformers";
+import { formatMovie } from "../utils/transformers";
 
 const options = {
   method: "GET",
@@ -12,8 +12,7 @@ const options = {
 
 const HTTPService = {
   getMovies: (
-    props: IPagination = { filters: { page: 1 } },
-  ): Promise<IPaginationResponse> => {
+    props: IPagination = { filters: { page: 1 } }, map: Map<number, string>): Promise<IPaginationResponse> => {
     const { filters } = props;
 
     const query = `?page=${filters.page}`;
@@ -30,7 +29,7 @@ const HTTPService = {
 
         const movies = await Promise.all(
           response.results.map(async (movie: IMovieAPI) =>
-            formatMovie(movie, await formatGenresToMap(movie.genre_ids)),
+            formatMovie(movie, map),
           ),
         );
 
