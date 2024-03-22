@@ -19,7 +19,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [genresMap, setGenresMap] = useState<Map<number, string>>(new Map());
-  const [filterGenre, setFilterGenre] = useState<number | null>(null)
+  const [filterGenre, setFilterGenre] = useState<number | null>(Number(searchParams.get("genre")) || null)
   const [sortBy, setSortBy] = useState<string | null>(null)
   const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(null)
   const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([])
@@ -65,12 +65,17 @@ function Home() {
     }
   }
 
+  function resetMovie() {
+    setMovies([])
+  }
+
   useEffect(() => {
     checkURL(currentPage);
   }, [genresMap]);
 
   useEffect(() => {
-    setSearchParams(`page=${currentPage}`);
+    resetMovie()
+    setSearchParams(`page=${currentPage}&genre=${filterGenre}`);
     getMovies(currentPage, genresMap);
   }, [currentPage, filterGenre]);
 
@@ -84,12 +89,13 @@ function Home() {
             options={genreOptions}
             selectedOption={selectedOption}
             onChange={(id: number | null) => {
-              setMovies([])
+              resetMovie()
               const label = genreOptions.find(item => item.value === id) || null
               !id ? setSelectedOption(null) : setSelectedOption(label)
               setFilterGenre(id)
             }}
             onClear={() => {
+              resetMovie()
               setSelectedOption(null)
               setFilterGenre(null)
             }}
