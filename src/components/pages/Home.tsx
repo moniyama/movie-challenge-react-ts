@@ -10,7 +10,9 @@ import MovieService from "../../services/MovieService";
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(
+    Number(searchParams.get("page")) || 1,
+  );
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -59,10 +61,6 @@ function Home() {
   }, [genresMap]);
 
   useEffect(() => {
-    if (!searchParams.get("page")) {
-      // only to use searchParams (linter)
-      setSearchParams(`page=1`);
-    }
     setSearchParams(`page=${currentPage}`);
     getMovies(currentPage, genresMap);
   }, [currentPage]);

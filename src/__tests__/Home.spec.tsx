@@ -1,6 +1,7 @@
 import {
   render,
   waitFor,
+  waitForElementToBeRemoved,
   // waitForElementToBeRemoved,
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -8,7 +9,12 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Home from "../components/pages/Home";
 import HTTPService from "../services/APIService";
-import { transformedFilmes } from "../__mocks__/mocks";
+import {
+  getMoviesServiceParameter,
+  movieGenderResponse,
+  transformedFilmes,
+} from "../__mocks__/mocks";
+import MovieService from "../services/MovieService";
 
 jest.mock("../utils/constants", () => "token API");
 jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue("3");
@@ -24,6 +30,10 @@ function Wrapper() {
     </MemoryRouter>
   );
 }
+const map = new Map();
+map.set(28, "Ação");
+map.set(35, "Comédia");
+map.set(18, "Drama");
 
 describe("Home Page view", () => {
   test("Renders Home at page 3", async () => {
@@ -37,12 +47,17 @@ describe("Home Page view", () => {
       movies: transformedFilmes,
     });
 
-    const { findAllByRole } = render(<Wrapper />);
+    jest
+      .spyOn(MovieService, "getMovieGenre")
+      .mockResolvedValue(movieGenderResponse);
+
+    const { findAllByRole, findByText } = render(<Wrapper />);
 
     await waitFor(() => {
-      expect(HTTPService.getMovies).toHaveBeenCalledWith({
-        filters: { page: 3 },
-      });
+      expect(HTTPService.getMovies).toHaveBeenCalledWith(
+        getMoviesServiceParameter,
+        map,
+      );
     });
 
     expect(await findAllByRole("listitem")).toHaveLength(5);

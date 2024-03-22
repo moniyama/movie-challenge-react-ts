@@ -17,21 +17,23 @@ function Pagination({
   ]);
 
   const createArrayPageToDisplay = (page: number) => {
+    // revisar - bug ao iniciar a page > 10
     let newDisplay: number[] = displayPages;
     let index = 1;
     const hasMoreDisplayedPagesThanTotalPages =
       totalPages < newDisplay[newDisplay.length - 1];
-    const displayedPagesContainsPage = newDisplay.includes(page);
     if (hasMoreDisplayedPagesThanTotalPages) {
       newDisplay = [];
       for (index; index <= totalPages; index += 1) {
         newDisplay.push(index);
       }
+    } else {
+      newDisplay = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     }
-
+    const displayedPagesContainsPage = newDisplay.includes(page);
     if (!displayedPagesContainsPage) {
       newDisplay = [];
-      const pageIsHigher = page > displayPages[0];
+      const pageIsHigher = page > displayPages[9];
       if (pageIsHigher) {
         index = displayPages[9] + 1;
         while (index + 10 < page) {
@@ -45,7 +47,6 @@ function Pagination({
       }
     }
     setDisplayPages(newDisplay);
-
     return displayPages;
   };
 
@@ -69,11 +70,13 @@ function Pagination({
 
   return (
     <div>
-      {hasPrevious && (
-        <button type="button" onClick={() => onSelectPage(currentPage - 1)}>
-          Anterior
-        </button>
-      )}
+      <button
+        type="button"
+        disabled={!hasPrevious}
+        onClick={() => onSelectPage(currentPage - 1)}
+      >
+        Anterior
+      </button>
       {!displayPages.includes(1) && ( // NOT NEEDED?
         <button
           type="button"
@@ -105,11 +108,13 @@ function Pagination({
           &gt;&gt;
         </button>
       )}
-      {hasNext && (
-        <button type="button" onClick={() => onSelectPage(currentPage + 1)}>
-          Proximo
-        </button>
-      )}
+      <button
+        type="button"
+        disabled={!hasNext}
+        onClick={() => onSelectPage(currentPage + 1)}
+      >
+        Proximo
+      </button>
     </div>
   );
 }
