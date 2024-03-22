@@ -16,13 +16,19 @@ function ListOptions({
 }) {
   return (
     <>
-      <select defaultValue='default' value={selectedOption?.value} onChange={(event) => { event.target.value !== "default" ? onChange(Number(event.target.value)) : onChange(null) }}>
-        <option value="default" selected={!selectedOption}>Selecione</option>
+      <select
+        value={selectedOption?.value || "default"}
+        onChange={(event) => {
+          if (event.target.value !== "default") {
+            onChange(Number(event.target.value));
+          } else {
+            onChange(null);
+          }
+        }}
+      >
+        <option value="default">Selecione</option>
         {options.map((item) => (
-          <option
-            key={`option-${item.value}-${item.label}`}
-            value={item.value}
-          >
+          <option key={`option-${item.value}-${item.label}`} value={item.value}>
             {item.label}
           </option>
         ))}
