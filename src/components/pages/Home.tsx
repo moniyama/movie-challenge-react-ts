@@ -4,8 +4,9 @@ import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
-import { formatGenresToMap } from "../../utils/transformers";
+import { formatGenresToMap, formatGenresToOptions } from "../../utils/transformers";
 import MovieService from "../../services/MovieService";
+import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,10 +14,15 @@ function Home() {
   const [currentPage, setCurrentPage] = useState<number>(
     Number(searchParams.get("page")) || 1,
   );
+
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [genresMap, setGenresMap] = useState<Map<number, string>>(new Map());
+  const [filterGenre, setFilterGenre] = useState<number | null>(null)
+  const [sortBy, setSortBy] = useState<string | null>(null)
+  const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(null)
+  const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([])
 
   async function getMovies(page: number, map: Map<number, string>) {
     setError(false);
@@ -26,6 +32,8 @@ function Home() {
         {
           filters: {
             page,
+            genreId: filterGenre || null,
+            sortBy: "sortBy" || null,
           },
         },
         map,
@@ -48,6 +56,7 @@ function Home() {
     if (!genresMap.size) {
       const genres = await getGenres();
       setGenresMap(formatGenresToMap(genres));
+      setGenreOptions(formatGenresToOptions(genres))
     }
 
     const result = await getMovies(currentPageState, genresMap);
@@ -63,7 +72,7 @@ function Home() {
   useEffect(() => {
     setSearchParams(`page=${currentPage}`);
     getMovies(currentPage, genresMap);
-  }, [currentPage]);
+  }, [currentPage, filterGenre]);
 
   return (
     <>
@@ -71,6 +80,20 @@ function Home() {
       {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
       {!!movies.length && !error && (
         <>
+          <ListOptions
+            options={genreOptions}
+            selectedOption={selectedOption}
+            onChange={(id: number | null) => {
+              setMovies([])
+              const label = genreOptions.find(item => item.value === id) || null
+              !id ? setSelectedOption(null) : setSelectedOption(label)
+              setFilterGenre(id)
+            }}
+            onClear={() => {
+              setSelectedOption(null)
+              setFilterGenre(null)
+            }}
+          />
           <MovieList movies={movies} />
           <Pagination
             currentPage={currentPage}

@@ -10,18 +10,17 @@ function ListOptions({
   onClear,
 }: {
   options: IMovieLabel[];
-  selectedOption: IMovieLabel;
+  selectedOption: IMovieLabel | null;
   onChange: Function;
   onClear: Function;
 }) {
   return (
     <>
-      <select onChange={() => onChange()}>
-        <option value="DEFAULT">Selecione</option>
+      <select defaultValue='default' value={selectedOption?.value} onChange={(event) => { event.target.value !== "default" ? onChange(Number(event.target.value)) : onChange(null) }}>
+        <option value="default" selected={!selectedOption}>Selecione</option>
         {options.map((item) => (
           <option
             key={`option-${item.value}-${item.label}`}
-            selected={selectedOption.value === item.value}
             value={item.value}
           >
             {item.label}
