@@ -1,7 +1,6 @@
 import {
   render,
   waitFor,
-  waitForElementToBeRemoved,
   // waitForElementToBeRemoved,
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -51,7 +50,7 @@ describe("Home Page view", () => {
       .spyOn(MovieService, "getMovieGenre")
       .mockResolvedValue(movieGenderResponse);
 
-    const { findAllByRole, findByText } = render(<Wrapper />);
+    const { findAllByRole } = render(<Wrapper />);
 
     await waitFor(() => {
       expect(HTTPService.getMovies).toHaveBeenCalledWith(

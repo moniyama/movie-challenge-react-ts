@@ -22,10 +22,13 @@ describe("Pagination component", () => {
         />,
       );
       const btns = await screen.findAllByRole("button");
-      expect(btns).toHaveLength(12);
+      expect(btns).toHaveLength(13);
       expect(btns.filter((item) => item.textContent === "1")[0]).toHaveClass(
         "current-page",
       );
+      expect(
+        btns.filter((item) => item.textContent === "Anterior")[0],
+      ).toBeDisabled();
     });
   });
 
@@ -73,10 +76,13 @@ describe("Pagination component", () => {
         />,
       );
       const btns = await screen.findAllByRole("button");
-      expect(btns).toHaveLength(5);
+      expect(btns).toHaveLength(6);
       expect(btns.filter((item) => item.textContent === "33")[0]).toHaveClass(
         "current-page",
       );
+      expect(
+        btns.filter((item) => item.textContent === "Proximo")[0],
+      ).toBeDisabled();
     });
   });
 
