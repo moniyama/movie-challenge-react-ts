@@ -39,6 +39,8 @@ export interface IPaginationResponse {
 export interface IPagination {
   filters: {
     page: number;
+    genreId: number | null;
+    sortBy: string | null;
   };
 }
 

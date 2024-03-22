@@ -17,7 +17,7 @@ const HTTPService = {
   ): Promise<IPaginationResponse> => {
     const { filters } = props;
 
-    const query = `?page=${filters.page}`;
+    const query = `?page=${filters.page}?sort_by=${filters.sortBy}&with_genres=${filters.genreId}`;
     const url = `https://api.themoviedb.org/3/discover/movie${query}`;
 
     return fetch(url, options)

@@ -43,7 +43,7 @@ describe("HTTP API Service - getMovies", () => {
       expect(resp.movies.length).toBe(5);
       expect(resp.movies[0].id).toBe(933131);
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.themoviedb.org/3/discover/movie?page=3",
+        "https://api.themoviedb.org/3/discover/movie?page=3?sort_by=sort&with_genres=28",
         options,
       );
     });
@@ -62,7 +62,7 @@ describe("HTTP API Service - getMovies", () => {
         success: false,
       });
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.themoviedb.org/3/discover/movie?page=3",
+        "https://api.themoviedb.org/3/discover/movie?page=3?sort_by=sort&with_genres=28",
         options,
       );
     });

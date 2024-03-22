@@ -21,7 +21,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/yyFc8Iclt2jxPmLztbP617xXllT.jpg",
-    genre_ids: [35, 10751, 14],
+    genre_ids: [35, 28, 14],
     id: 787699,
     original_language: "en",
     original_title: "Wonka",
@@ -149,6 +149,8 @@ const transformedFilmes: IMovie[] = [
 const getMoviesServiceParameter: IPagination = {
   filters: {
     page: 3,
+    genreId: 28,
+    sortBy: "sort",
   },
 };
 
