@@ -1,16 +1,23 @@
 import "./MovieCard.css";
-import { IMovie } from "../../models/Movie";
 import { useNavigate } from "react-router-dom";
+import { IMovie } from "../../models/Movie";
 
 function MovieCard({ movie }: { movie: IMovie }) {
   const navigate = useNavigate();
   const { title, releaseYear, poster, genre, id } = movie;
   return (
-    <li onClick={() => navigate(`/movie/${id}`)}>
-      <h1>{title}</h1>
-      <img src={poster} alt={`poster do filme ${title}`} />
-      <p>{releaseYear}</p>
-      <p>{genre.join(", ")}</p>
+    <li>
+      <div
+        role="button"
+        onClick={() => navigate(`/movie/${id}`)}
+        onKeyDown={() => navigate(`/movie/${id}`)}
+        tabIndex={0}
+      >
+        <h1>{title}</h1>
+        <img src={poster} alt={`poster do filme ${title}`} />
+        <p>{releaseYear}</p>
+        <p>{genre.join(", ")}</p>
+      </div>
     </li>
   );
 }
