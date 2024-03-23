@@ -1,3 +1,4 @@
+import { IMovieLabel } from "../components/ListOptions/ListOptions";
 import { IMovie, IMovieAPI, IMovieGenre, IPagination } from "../models/Movie";
 
 const filmesAPI: IMovieAPI[] = [
@@ -160,9 +161,22 @@ const movieGenderResponse: IMovieGenre[] = [
   { id: 18, name: "Drama" },
 ];
 
+const genderOptions: IMovieLabel[] = [
+  { value: 28, label: "Ação" },
+  { value: 35, label: "Comédia" },
+  { value: 18, label: "Drama" },
+];
+
+const selectedGenderOptions: IMovieLabel = {
+  value: 28,
+  label: "Ação",
+};
+
 export {
   filmesAPI,
   getMoviesServiceParameter,
   transformedFilmes,
   movieGenderResponse,
+  genderOptions,
+  selectedGenderOptions,
 };
