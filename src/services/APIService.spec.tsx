@@ -1,4 +1,8 @@
-import { filmesAPI, getMoviesServiceParameter } from "../__mocks__/mocks";
+import {
+  filmesAPI,
+  getMoviesServiceParameter,
+  movieDetailsAPI,
+} from "../__mocks__/mocks";
 import HTTPService from "./APIService";
 
 jest.mock("../utils/constants", () => "token API");
@@ -153,7 +157,7 @@ describe("HTTP API Service - getMovieGenre", () => {
 describe("HTTP API Service - getMovieDetails", () => {
   it("getMovieDetails returns an object IMovieGenre", () => {
     global.fetch = jest.fn().mockResolvedValueOnce({
-      json: () => Promise.resolve(filmesAPI[0]),
+      json: () => Promise.resolve(movieDetailsAPI),
     }) as jest.Mock;
 
     HTTPService.getMovieDetail(933131, map).then((resp) => {

@@ -10,7 +10,9 @@ function MovieCard({ movie }: { movie: IMovie }) {
       <div
         role="button"
         onClick={() => navigate(`/movie/${id}`)}
-        onKeyDown={() => navigate(`/movie/${id}`)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") navigate(`/movie/${id}`);
+        }}
         tabIndex={0}
       >
         <h1>{title}</h1>
