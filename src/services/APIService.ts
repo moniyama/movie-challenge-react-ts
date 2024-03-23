@@ -16,8 +16,7 @@ const HTTPService = {
     map: Map<number, string>,
   ): Promise<IPaginationResponse> => {
     const { filters } = props;
-
-    let query = ""
+    let query = "";
     if (!filters.genreId) {
       query = `?page=${filters.page}?sort_by=${filters.sortBy}`;
     } else {

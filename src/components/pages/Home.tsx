@@ -4,7 +4,10 @@ import HTTPService from "../../services/APIService";
 import { IMovie } from "../../models/Movie";
 import MovieList from "../MovieList/MovieList";
 import Pagination from "../Pagination/Pagination";
-import { formatGenresToMap, formatGenresToOptions } from "../../utils/transformers";
+import {
+  formatGenresToMap,
+  formatGenresToOptions,
+} from "../../utils/transformers";
 import MovieService from "../../services/MovieService";
 import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
 
@@ -19,10 +22,14 @@ function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [genresMap, setGenresMap] = useState<Map<number, string>>(new Map());
-  const [filterGenre, setFilterGenre] = useState<number | null>(Number(searchParams.get("genre")) || null)
-  const [sortBy, setSortBy] = useState<string | null>(null)
-  const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(null)
-  const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([])
+  const [filterGenre, setFilterGenre] = useState<number | null>(
+    Number(searchParams.get("genre")) || null,
+  );
+  // const [sortBy, setSortBy] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(
+    null,
+  );
+  const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([]);
 
   async function getMovies(page: number, map: Map<number, string>) {
     setError(false);
@@ -56,7 +63,7 @@ function Home() {
     if (!genresMap.size) {
       const genres = await getGenres();
       setGenresMap(formatGenresToMap(genres));
-      setGenreOptions(formatGenresToOptions(genres))
+      setGenreOptions(formatGenresToOptions(genres));
     }
 
     const result = await getMovies(currentPageState, genresMap);
@@ -66,7 +73,7 @@ function Home() {
   }
 
   function resetMovie() {
-    setMovies([])
+    setMovies([]);
   }
 
   useEffect(() => {
@@ -74,7 +81,7 @@ function Home() {
   }, [genresMap]);
 
   useEffect(() => {
-    resetMovie()
+    resetMovie();
     setSearchParams(`page=${currentPage}&genre=${filterGenre}`);
     getMovies(currentPage, genresMap);
   }, [currentPage, filterGenre]);
@@ -89,15 +96,21 @@ function Home() {
             options={genreOptions}
             selectedOption={selectedOption}
             onChange={(id: number | null) => {
-              resetMovie()
-              const label = genreOptions.find(item => item.value === id) || null
-              !id ? setSelectedOption(null) : setSelectedOption(label)
-              setFilterGenre(id)
+              resetMovie();
+              if (!id) {
+                setSelectedOption(null);
+              } else {
+                const label =
+                  genreOptions.find((item) => item.value === id) || null;
+                setSelectedOption(label);
+                setSelectedOption(label);
+              }
+              setFilterGenre(id);
             }}
             onClear={() => {
-              resetMovie()
-              setSelectedOption(null)
-              setFilterGenre(null)
+              resetMovie();
+              setSelectedOption(null);
+              setFilterGenre(null);
             }}
           />
           <MovieList movies={movies} />
