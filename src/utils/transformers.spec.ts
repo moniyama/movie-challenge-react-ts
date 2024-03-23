@@ -51,6 +51,6 @@ describe("formatGenresToOptions utils function", () => {
     });
   });
   it("returns empty new Map when function invoked without params", async () => {
-    expect(formatGenresToOptions([])).toEqual([]);
+    expect(formatGenresToOptions()).toEqual([]);
   });
 });
