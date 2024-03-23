@@ -5,7 +5,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/pWsD91G2R1Da3AKM3ymr3UoIfRb.jpg",
-    genre_ids: [878, 28, 18],
+    genre_ids: [28],
     id: 933131,
     original_language: "ko",
     original_title: "황야",
@@ -22,7 +22,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/yyFc8Iclt2jxPmLztbP617xXllT.jpg",
-    genre_ids: [35, 28, 14],
+    genre_ids: [35, 28],
     id: 787699,
     original_language: "en",
     original_title: "Wonka",
@@ -39,7 +39,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/unvtbkgxh47BewQ8pENvdOdme0r.jpg",
-    genre_ids: [28, 18],
+    genre_ids: [18],
     id: 1212073,
     original_language: "de",
     original_title: "60 Minuten",
@@ -56,7 +56,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/s9YTxwaByYeoSqugYjJJtZjMRAG.jpg",
-    genre_ids: [28, 27, 35, 53],
+    genre_ids: [28, 18],
     id: 1211483,
     original_language: "en",
     original_title: "Skal - Fight for Survival",

@@ -1,4 +1,5 @@
 import {
+  IMovie,
   IMovieAPI,
   IMovieGenre,
   IPagination,
@@ -67,6 +68,20 @@ const HTTPService = {
         )
           return Promise.reject(response);
         return response.genres;
+      });
+  },
+
+  getMovieDetail: (id: number, map: Map<number, string>): Promise<IMovie> => {
+    const url = `https://api.themoviedb.org/3/movie/${id}`;
+    return fetch(url, options)
+      .then((response) => response.json())
+      .then((response) => {
+        if (
+          Object.prototype.hasOwnProperty.call(response, "success") &&
+          !response.success
+        )
+          return Promise.reject(response);
+        return formatMovie(response, map);
       });
   },
 };
