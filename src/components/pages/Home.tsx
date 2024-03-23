@@ -13,8 +13,8 @@ import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const pageParam = Number(searchParams.get("page"))
-  const genreIdParam = Number(searchParams.get("genre"))
+  const pageParam = Number(searchParams.get("page"));
+  const genreIdParam = Number(searchParams.get("genre"));
 
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(pageParam || 1);
@@ -29,7 +29,7 @@ function Home() {
   // const [sortBy, setSortBy] = useState<string | null>(null);
   const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([]);
   const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(
-    genreOptions.find(item => item.value === filterGenre) || null,
+    genreOptions.find((item) => item.value === filterGenre) || null,
   );
 
   async function getMovies(page: number, map: Map<number, string>) {
@@ -83,11 +83,11 @@ function Home() {
 
   useEffect(() => {
     resetMovie();
-    const find = genreOptions.find(item => item.value === filterGenre) || null
-    setSelectedOption(find)
+    const find =
+      genreOptions.find((item) => item.value === filterGenre) || null;
+    setSelectedOption(find);
     setSearchParams(`page=${currentPage}&genre=${filterGenre}`);
     getMovies(currentPage, genresMap);
-    
   }, [currentPage, filterGenre, genreOptions]);
 
   return (

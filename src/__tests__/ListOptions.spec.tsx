@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render } from "@testing-library/react";
 import ListOptions from "../components/ListOptions/ListOptions";
 import { genderOptions, selectedGenderOptions } from "../__mocks__/mocks";
 
@@ -68,7 +68,6 @@ describe("List options Component", () => {
     );
 
     const selects = await findByRole("combobox");
-    screen.debug(selects);
     fireEvent.change(selects, { target: { value: "default" } });
     expect(onChangeMock).toHaveBeenCalledWith(null);
   });
