@@ -24,3 +24,19 @@ export interface IMovieAPI {
   vote_average: number;
   vote_count: number;
 }
+
+export interface IPaginationResponse {
+  metaData: {
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+    };
+  };
+  movies: IMovie[];
+}
+
+export interface IPagination {
+  filters: {
+    page: number;
+  };
+}

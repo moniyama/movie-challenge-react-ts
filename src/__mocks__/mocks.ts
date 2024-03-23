@@ -1,4 +1,4 @@
-import { IMovieAPI } from "../models/Movie";
+import { IMovie, IMovieAPI, IPagination } from "../models/Movie";
 
 const filmesAPI: IMovieAPI[] = [
   {
@@ -88,5 +88,63 @@ const filmesAPI: IMovieAPI[] = [
   },
 ];
 
-const testes = "";
-export { filmesAPI, testes };
+const transformedFilmes: IMovie[] = [
+  {
+    id: 933131,
+    language: "ko",
+    overview:
+      "After a deadly earthquake turns Seoul into a lawless badland, a fearless huntsman springs into action to rescue a teenager abducted by a mad doctor.",
+    poster: "/zVMyvNowgbsBAL6O6esWfRpAcOb.jpg",
+    releaseYear: 2024,
+    title: "Badland Hunters",
+    voteAverage: 6.74,
+  },
+  {
+    id: 787699,
+    language: "en",
+    overview:
+      "Willy Wonka – chock-full of ideas and determined to change the world one delectable bite at a time – is proof that the best things in life begin with a dream, and if you’re lucky enough to meet Willy Wonka, anything is possible.",
+    poster: "/qhb1qOilapbapxWQn9jtRCMwXJF.jpg",
+    releaseYear: 2023,
+    title: "Wonka",
+    voteAverage: 7.2,
+  },
+  {
+    id: 1212073,
+    language: "de",
+    overview:
+      "Desperate to keep custody of his daughter, a mixed martial arts fighter abandons a big match and races across Berlin to attend her birthday party.",
+    poster: "/jojfbnIHGsRpodIood3OQoqA45Y.jpg",
+    releaseYear: 2024,
+    title: "Sixty Minutes",
+    voteAverage: 6.864,
+  },
+  {
+    id: 1211483,
+    language: "en",
+    overview:
+      "My name's Arthur, a huge Internet star who's just hit 3 million subs. While in the midst of throwing an epic party to celebrate, the universe had the balls to bring on the effing apocalypse and cut my night short. What was supposed to be a perfect hangover, has turned into an epic fight for survival.",
+    poster: "/uQkiDKQyun13mqsOXv7I5MRKr0q.jpg",
+    releaseYear: 2023,
+    title: "Skal - Fight for Survival",
+    voteAverage: 5.75,
+  },
+  {
+    id: 1029575,
+    language: "en",
+    overview:
+      "Dan Morgan is many things: a devoted husband, a loving father, a celebrated car salesman. He's also a former assassin. And when his past catches up to his present, he's forced to take his unsuspecting family on a road trip unlike any other.",
+    poster: "/jLLtx3nTRSLGPAKl4RoIv1FbEBr.jpg",
+    releaseYear: 2023,
+    title: "The Family Plan",
+    voteAverage: 7.331,
+  },
+];
+
+const getMoviesServiceParameter: IPagination = {
+  filters: {
+    page: 3,
+  },
+};
+
+export { filmesAPI, getMoviesServiceParameter, transformedFilmes };
