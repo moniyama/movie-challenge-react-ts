@@ -78,19 +78,17 @@ function Home() {
   }
 
   useEffect(() => {
-    const find = genreOptions.find(item => item.value === filterGenre) || null
-    setSelectedOption(find)
-  }, [filterGenre, genreOptions])
-
-  useEffect(() => {
     checkURL(currentPage);
   }, [genresMap]);
 
   useEffect(() => {
     resetMovie();
+    const find = genreOptions.find(item => item.value === filterGenre) || null
+    setSelectedOption(find)
     setSearchParams(`page=${currentPage}&genre=${filterGenre}`);
     getMovies(currentPage, genresMap);
-  }, [currentPage, filterGenre]);
+    
+  }, [currentPage, filterGenre, genreOptions]);
 
   return (
     <>
@@ -106,8 +104,10 @@ function Home() {
               setFilterGenre(id);
             }}
             onClear={() => {
-              resetMovie();
-              setFilterGenre(null);
+              if (filterGenre) {
+                resetMovie();
+                setFilterGenre(null);
+              }
             }}
           />
           <MovieList movies={movies} />
