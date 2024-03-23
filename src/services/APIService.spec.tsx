@@ -68,3 +68,55 @@ describe("HTTP API Service - getMovies", () => {
     });
   });
 });
+
+describe("HTTP API Service - getMovieGenre", () => {
+  it("getMovieGenre returns an array of objects IMovieGenre", () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      json: () =>
+        Promise.resolve({
+          genres: [
+            {
+              id: 28,
+              name: "Action",
+            },
+            {
+              id: 12,
+              name: "Adventure",
+            },
+            {
+              id: 16,
+              name: "Animation",
+            },
+          ],
+        }),
+    }) as jest.Mock;
+
+    HTTPService.getMovieGenre().then((resp) => {
+      expect(resp.length).toBe(3);
+      expect(resp[0].id).toBe(28);
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.themoviedb.org/3/genre/movie/list",
+        options,
+      );
+    });
+  });
+
+  it("getMovieGenre returns an object with page 1 when invoked without parameters", () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      json: () =>
+        Promise.resolve({
+          success: false,
+        }),
+    }) as jest.Mock;
+
+    HTTPService.getMovieGenre().catch((resp) => {
+      expect(resp).toEqual({
+        success: false,
+      });
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.themoviedb.org/3/genre/movie/list",
+        options,
+      );
+    });
+  });
+});

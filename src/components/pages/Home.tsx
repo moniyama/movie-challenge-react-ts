@@ -8,7 +8,6 @@ import {
   formatGenresToMap,
   formatGenresToOptions,
 } from "../../utils/transformers";
-import MovieService from "../../services/MovieService";
 import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
 
 function Home() {
@@ -56,7 +55,7 @@ function Home() {
   }
 
   async function getGenres() {
-    return MovieService.getMovieGenre();
+    return HTTPService.getMovieGenre();
   }
 
   async function checkURL(currentPageState: number) {
