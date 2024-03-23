@@ -81,6 +81,8 @@ const HTTPService = {
           !response.success
         )
           return Promise.reject(response);
+        const modifyGenres = response.genres.map((item: IMovieGenre) => item.id)
+        response.genre_ids = modifyGenres
         return formatMovie(response, map);
       });
   },
