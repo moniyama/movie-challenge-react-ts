@@ -1,4 +1,5 @@
-import { IMovie, IMovieAPI, IPagination } from "../models/Movie";
+import { IMovieLabel } from "../components/ListOptions/ListOptions";
+import { IMovie, IMovieAPI, IMovieGenre, IPagination } from "../models/Movie";
 
 const filmesAPI: IMovieAPI[] = [
   {
@@ -21,7 +22,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/yyFc8Iclt2jxPmLztbP617xXllT.jpg",
-    genre_ids: [35, 10751, 14],
+    genre_ids: [35, 28, 14],
     id: 787699,
     original_language: "en",
     original_title: "Wonka",
@@ -98,6 +99,7 @@ const transformedFilmes: IMovie[] = [
     releaseYear: 2024,
     title: "Badland Hunters",
     voteAverage: 6.74,
+    genre: ["ação"],
   },
   {
     id: 787699,
@@ -108,6 +110,7 @@ const transformedFilmes: IMovie[] = [
     releaseYear: 2023,
     title: "Wonka",
     voteAverage: 7.2,
+    genre: ["aventura", "comédia"],
   },
   {
     id: 1212073,
@@ -118,6 +121,7 @@ const transformedFilmes: IMovie[] = [
     releaseYear: 2024,
     title: "Sixty Minutes",
     voteAverage: 6.864,
+    genre: ["ação", "comédia"],
   },
   {
     id: 1211483,
@@ -128,6 +132,7 @@ const transformedFilmes: IMovie[] = [
     releaseYear: 2023,
     title: "Skal - Fight for Survival",
     voteAverage: 5.75,
+    genre: ["familia", "ação"],
   },
   {
     id: 1029575,
@@ -138,13 +143,40 @@ const transformedFilmes: IMovie[] = [
     releaseYear: 2023,
     title: "The Family Plan",
     voteAverage: 7.331,
+    genre: ["aventura", "familia"],
   },
 ];
 
 const getMoviesServiceParameter: IPagination = {
   filters: {
     page: 3,
+    genreId: 28,
+    sortBy: "sort",
   },
 };
 
-export { filmesAPI, getMoviesServiceParameter, transformedFilmes };
+const movieGenderResponse: IMovieGenre[] = [
+  { id: 28, name: "Ação" },
+  { id: 35, name: "Comédia" },
+  { id: 18, name: "Drama" },
+];
+
+const genderOptions: IMovieLabel[] = [
+  { value: 28, label: "Ação" },
+  { value: 35, label: "Comédia" },
+  { value: 18, label: "Drama" },
+];
+
+const selectedGenderOptions: IMovieLabel = {
+  value: 28,
+  label: "Ação",
+};
+
+export {
+  filmesAPI,
+  getMoviesServiceParameter,
+  transformedFilmes,
+  movieGenderResponse,
+  genderOptions,
+  selectedGenderOptions,
+};

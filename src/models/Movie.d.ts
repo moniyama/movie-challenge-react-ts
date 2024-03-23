@@ -6,6 +6,7 @@ export interface IMovie {
   overview: string;
   voteAverage: number;
   language: string;
+  genre: string[];
 }
 
 export interface IMovieAPI {
@@ -38,5 +39,12 @@ export interface IPaginationResponse {
 export interface IPagination {
   filters: {
     page: number;
+    genreId: number | null;
+    sortBy: string | null;
   };
+}
+
+export interface IMovieGenre {
+  id: number;
+  name: string;
 }
