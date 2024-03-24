@@ -15,7 +15,7 @@ function Home() {
 
   const [totalPages, setTotalPages] = useState<number>(0);
   const [queryPage, setQueryPage] = useState<number>(
-    Number(searchParams.get("page")) || 1
+    Number(searchParams.get("page")) || 1,
   );
   const [queryGenre, setQueryGenre] = useState<number | null>(
     Number(searchParams.get("genre")) || null,
@@ -33,27 +33,8 @@ function Home() {
     genreOptions.find((item) => item.value === queryGenre) || null,
   );
 
-  async function updateGenresOnInit() {
-    if (!genresMap.size) {
-      const genres = await getGenres();
-      setGenresMap(formatGenresToMap(genres));
-      setGenreOptions(formatGenresToOptions(genres));
-    }
-  }
-
   async function getGenres() {
     return HTTPService.getMovieGenre();
-  }
-
-  function handleSelectedOption() {
-    if (queryGenre) {
-      const find = genreOptions.find(item => item.value === queryGenre) || null;
-      setSelectedOption(find);
-    } else {
-      setSelectedOption(null);
-    }
-
-    getMovies(queryPage, genresMap);
   }
 
   async function getMovies(page: number, map: Map<number, string>) {
@@ -71,14 +52,34 @@ function Home() {
         map,
       );
       setMovies(result.movies);
-      setTotalPages(result.metaData.pagination.totalPages)
+      setTotalPages(result.metaData.pagination.totalPages);
     } catch (err) {
       setError(true);
     } finally {
       setIsLoading(false);
     }
   }
-  
+
+  async function updateGenresOnInit() {
+    if (!genresMap.size) {
+      const genres = await getGenres();
+      setGenresMap(formatGenresToMap(genres));
+      setGenreOptions(formatGenresToOptions(genres));
+    }
+  }
+
+  function handleSelectedOption() {
+    if (queryGenre) {
+      const find =
+        genreOptions.find((item) => item.value === queryGenre) || null;
+      setSelectedOption(find);
+    } else {
+      setSelectedOption(null);
+    }
+
+    getMovies(queryPage, genresMap);
+  }
+
   function resetMovie() {
     setMovies([]);
   }
@@ -88,16 +89,16 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    handleSelectedOption()
-  }, [genresMap])
+    handleSelectedOption();
+  }, [genresMap]);
 
   useEffect(() => {
     resetMovie();
     setSearchParams({
-      "page": queryPage.toString(),
-      "genre": queryGenre?.toString() || "null"
+      page: queryPage.toString(),
+      genre: queryGenre?.toString() || "null",
     });
-    handleSelectedOption()
+    handleSelectedOption();
   }, [queryPage, queryGenre]);
 
   return (
