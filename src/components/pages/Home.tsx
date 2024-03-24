@@ -13,24 +13,48 @@ import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const pageParam = Number(searchParams.get("page"));
-  const genreIdParam = Number(searchParams.get("genre"));
-
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(pageParam || 1);
+  const [queryPage, setQueryPage] = useState<number>(
+    Number(searchParams.get("page")) || 1
+  );
+  const [queryGenre, setQueryGenre] = useState<number | null>(
+    Number(searchParams.get("genre")) || null,
+  );
 
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+
   const [genresMap, setGenresMap] = useState<Map<number, string>>(new Map());
-  const [filterGenre, setFilterGenre] = useState<number | null>(
-    genreIdParam || null,
-  );
-  // const [sortBy, setSortBy] = useState<string | null>(null);
   const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([]);
+
+  // const [sortBy, setSortBy] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(
-    genreOptions.find((item) => item.value === filterGenre) || null,
+    genreOptions.find((item) => item.value === queryGenre) || null,
   );
+
+  async function updateGenresOnInit() {
+    if (!genresMap.size) {
+      const genres = await getGenres();
+      setGenresMap(formatGenresToMap(genres));
+      setGenreOptions(formatGenresToOptions(genres));
+    }
+  }
+
+  async function getGenres() {
+    return HTTPService.getMovieGenre();
+  }
+
+  function handleSelectedOption() {
+    if (queryGenre) {
+      const find = genreOptions.find(item => item.value === queryGenre) || null;
+      setSelectedOption(find);
+    } else {
+      setSelectedOption(null);
+    }
+
+    getMovies(queryPage, genresMap);
+  }
 
   async function getMovies(page: number, map: Map<number, string>) {
     setError(false);
@@ -40,55 +64,41 @@ function Home() {
         {
           filters: {
             page,
-            genreId: filterGenre || null,
+            genreId: queryGenre || null,
             sortBy: "sortBy" || null,
           },
         },
         map,
       );
       setMovies(result.movies);
-      return result;
+      setTotalPages(result.metaData.pagination.totalPages)
     } catch (err) {
       setError(true);
-      return undefined;
     } finally {
       setIsLoading(false);
     }
   }
-
-  async function getGenres() {
-    return HTTPService.getMovieGenre();
-  }
-
-  async function checkURL(currentPageState: number) {
-    if (!genresMap.size) {
-      const genres = await getGenres();
-      setGenresMap(formatGenresToMap(genres));
-      setGenreOptions(formatGenresToOptions(genres));
-    }
-
-    const result = await getMovies(currentPageState, genresMap);
-    if (typeof result !== "undefined") {
-      setTotalPages(result.metaData.pagination.totalPages);
-    }
-  }
-
+  
   function resetMovie() {
     setMovies([]);
   }
 
   useEffect(() => {
-    checkURL(currentPage);
-  }, [genresMap]);
+    updateGenresOnInit();
+  }, []);
+
+  useEffect(() => {
+    handleSelectedOption()
+  }, [genresMap])
 
   useEffect(() => {
     resetMovie();
-    const find =
-      genreOptions.find((item) => item.value === filterGenre) || null;
-    setSelectedOption(find);
-    setSearchParams(`page=${currentPage}&genre=${filterGenre}`);
-    getMovies(currentPage, genresMap);
-  }, [currentPage, filterGenre, genreOptions]);
+    setSearchParams({
+      "page": queryPage.toString(),
+      "genre": queryGenre?.toString() || "null"
+    });
+    handleSelectedOption()
+  }, [queryPage, queryGenre]);
 
   return (
     <>
@@ -99,21 +109,13 @@ function Home() {
           <ListOptions
             options={genreOptions}
             selectedOption={selectedOption}
-            onChange={(id: number | null) => {
-              resetMovie();
-              setFilterGenre(id);
-            }}
-            onClear={() => {
-              if (filterGenre) {
-                resetMovie();
-                setFilterGenre(null);
-              }
-            }}
+            onChange={setQueryGenre}
+            onClear={() => setQueryGenre(null)}
           />
           <MovieList movies={movies} />
           <Pagination
-            currentPage={currentPage}
-            onSelectPage={setCurrentPage}
+            currentPage={queryPage}
+            onSelectPage={setQueryPage}
             totalPages={totalPages}
           />
         </>
