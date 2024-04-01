@@ -1,8 +1,4 @@
-import {
-  render,
-  waitFor,
-  // waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, waitFor, screen, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
@@ -15,68 +11,76 @@ import {
 } from "../__mocks__/mocks";
 
 jest.mock("../utils/constants", () => "token API");
-jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue("3");
+// jest.mock("react-router-dom", () => ({
+//   ...jest.requireActual("react-router-dom"),
+//   useSearchParams: () => mockNavigate,
+// }));
 
-afterEach(() => {
-  jest.clearAllMocks();
+// jest.mock("react-router-dom", "get").mockReturnValue("3");
+jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
+  metaData: {
+    pagination: {
+      currentPage: 123,
+      totalPages: 200,
+    },
+  },
+  movies: transformedFilmes,
 });
+jest.spyOn(HTTPService, "getMovieGenre").mockResolvedValue(movieGenderResponse);
 
 function Wrapper() {
   return (
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["?page=123&genre=28"]}>
       <Home />
     </MemoryRouter>
   );
 }
+
+afterEach(() => {
+  cleanup();
+  jest.clearAllMocks();
+});
+
+beforeEach(() => {
+  render(<Wrapper />);
+});
+
 const map = new Map();
 map.set(28, "Ação");
 map.set(35, "Comédia");
 map.set(18, "Drama");
 
-describe.skip("Home Page view", () => {
-  test("Renders Home at page 3", async () => {
-    jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
-      metaData: {
-        pagination: {
-          currentPage: 3,
-          totalPages: 3,
-        },
-      },
-      movies: transformedFilmes,
+const getMoviesFilterParams = {
+  filters: {
+    page: 123, // mock
+    genreId: 28,
+    sortBy: "sortBy",
+  },
+};
+
+describe("Home Page view", () => {
+  test.skip("Renders Home at page 3", async () => {
+    const { findAllByRole } = screen;
+
+    await waitFor(() => {
+      expect(HTTPService.getMovies).toHaveBeenCalledWith(
+        getMoviesFilterParams,
+        map,
+      );
     });
-
-    jest
-      .spyOn(MovieService, "getMovieGenre")
-      .mockResolvedValue(movieGenderResponse);
-
-    const { findAllByRole } = render(<Wrapper />);
-
-    // await waitFor(() => {
-    //   expect(HTTPService.getMovies).toHaveBeenCalledWith(
-    //     getMoviesServiceParameter,
-    //     map,
-    //   );
-    // });
-
     expect(await findAllByRole("listitem")).toHaveLength(5);
     expect(await findAllByRole("option")).toHaveLength(4);
-    expect(await findAllByRole("list")).toHaveLength(1);
-    // await waitForElementToBeRemoved(() => findByText(/carregando/));
+    screen.debug();
+    // expect(await findAllByRole("list")).toHaveLength(1);
+    // expect(await findAllByRole("button")).toHaveLength(10);
+    // await waitForElementToBeRemoved(() => findByText("carregando.."));
   });
 
   test("Renders error message", async () => {
     jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
-    /* jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
-      metaData: {
-        pagination: {
-          currentPage: 3,
-          totalPages: 4,
-        },
-      },
-      movies: transformedFilmes,
-    }); */
+    /* jest.spyOn(HTTPService, "getMovies").mockResolvedValue(getMoviesFilterParams); */
 
-    const { getByText, findByText } = render(<Wrapper />);
+    const { getByText, findByText } = screen;
     await waitFor(() => {
       const message = getByText(
         "Ops.. Ocorreu uma falha! Tente novamente mais tarde",
@@ -88,42 +92,24 @@ describe.skip("Home Page view", () => {
     ).toBeTruthy();
   });
 
-  test("click in button proximo it changes current page", async () => {
+  test.skip("click in button proximo it changes current page", async () => {
     const user = userEvent.setup();
-    jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
-      metaData: {
-        pagination: {
-          currentPage: 3,
-          totalPages: 4,
-        },
-      },
-      movies: transformedFilmes,
-    });
-    const { findByText, findByRole } = render(<Wrapper />);
 
-    expect(await findByRole("button", { name: "3" })).toHaveClass(
+    const { findByText, findByRole } = screen;
+
+    expect(await findByRole("button", { name: "123" })).toHaveClass(
       "current-page",
     );
 
     user.click(await findByText(/Proximo/)).then(async () => {
-      expect(await findByRole("button", { name: "4" })).toHaveClass(
+      expect(await findByRole("button", { name: "124" })).toHaveClass(
         "current-page",
       );
     });
   });
 
-  test("click in button reset", async () => {
+  test.skip("click in button reset", async () => {
     const user = userEvent.setup();
-    jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
-      metaData: {
-        pagination: {
-          currentPage: 3,
-          totalPages: 4,
-        },
-      },
-      movies: transformedFilmes,
-    });
-
     const { findByText } = render(<Wrapper />);
 
     const btn = await findByText(/Limpar/);
