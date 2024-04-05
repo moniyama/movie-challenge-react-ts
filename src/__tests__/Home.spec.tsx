@@ -20,17 +20,17 @@ jest.mock("../utils/constants", () => "token API");
 jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
   metaData: {
     pagination: {
-      currentPage: 123,
-      totalPages: 200,
+      currentPage: 3,
+      totalPages: 20,
     },
   },
   movies: transformedFilmes,
 });
 jest.spyOn(HTTPService, "getMovieGenre").mockResolvedValue(movieGenderResponse);
 
-function Wrapper() {
+function Wrapper({ query }: { query: string }) {
   return (
-    <MemoryRouter initialEntries={["?page=123&genre=28"]}>
+    <MemoryRouter initialEntries={[query]}>
       <Home />
     </MemoryRouter>
   );
@@ -41,10 +41,6 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-beforeEach(() => {
-  render(<Wrapper />);
-});
-
 const map = new Map();
 map.set(28, "Ação");
 map.set(35, "Comédia");
@@ -52,35 +48,41 @@ map.set(18, "Drama");
 
 const getMoviesFilterParams = {
   filters: {
-    page: 123, // mock
+    page: 3, // mock
     genreId: 28,
     sortBy: "sortBy",
   },
 };
 
 describe("Home Page view", () => {
-  test.skip("Renders Home at page 3", async () => {
-    const { findAllByRole } = screen;
+  test("Renders Home at page 3", async () => {
+    const { queryByText, findAllByRole, findByRole } = render(
+      <Wrapper query="?page=3&genre=28" />,
+    );
 
     await waitFor(() => {
+      expect(queryByText("carregando...")).not.toBeInTheDocument(); // initially present
       expect(HTTPService.getMovies).toHaveBeenCalledWith(
         getMoviesFilterParams,
         map,
       );
     });
+
     expect(await findAllByRole("listitem")).toHaveLength(5);
     expect(await findAllByRole("option")).toHaveLength(4);
-    screen.debug();
-    // expect(await findAllByRole("list")).toHaveLength(1);
-    // expect(await findAllByRole("button")).toHaveLength(10);
-    // await waitForElementToBeRemoved(() => findByText("carregando.."));
+    expect(await findAllByRole("list")).toHaveLength(1);
+    expect(await findByRole("button", { name: "3" })).toHaveClass(
+      "current-page",
+    );
   });
 
   test("Renders error message", async () => {
     jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
     /* jest.spyOn(HTTPService, "getMovies").mockResolvedValue(getMoviesFilterParams); */
 
-    const { getByText, findByText } = screen;
+    const { getByText, findByText } = render(
+      <Wrapper query="?page=3&genre=28" />,
+    );
     await waitFor(() => {
       const message = getByText(
         "Ops.. Ocorreu uma falha! Tente novamente mais tarde",
@@ -92,17 +94,23 @@ describe("Home Page view", () => {
     ).toBeTruthy();
   });
 
+  test("when query genre is not present in url", async () => {
+    render(<Wrapper query="?page=3" />);
+    console.log(window.location);
+    screen.debug();
+  });
+
   test.skip("click in button proximo it changes current page", async () => {
     const user = userEvent.setup();
 
-    const { findByText, findByRole } = screen;
+    const { findByRole, findByText } = render(<Wrapper query="?page=3" />);
 
     expect(await findByRole("button", { name: "123" })).toHaveClass(
       "current-page",
     );
 
     user.click(await findByText(/Proximo/)).then(async () => {
-      expect(await findByRole("button", { name: "124" })).toHaveClass(
+      expect(await findByRole("button", { name: "4" })).toHaveClass(
         "current-page",
       );
     });
