@@ -1,11 +1,10 @@
-import { render, waitFor, screen, cleanup } from "@testing-library/react";
+import { render, waitFor, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Home from "../components/pages/Home";
 import HTTPService from "../services/APIService";
 import {
-  // getMoviesServiceParameter,
   movieGenderResponse,
   transformedFilmes,
 } from "../__mocks__/mocks";
@@ -23,6 +22,9 @@ jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
 jest.spyOn(HTTPService, "getMovieGenre").mockResolvedValue(movieGenderResponse);
 
 function Wrapper({ query }: { query: string }) {
+  const url = `${window.location.pathname + query}`;
+  window.history.pushState({}, "", url);
+
   return (
     <MemoryRouter initialEntries={[query]}>
       <Home />
@@ -101,14 +103,13 @@ describe("Home Page view", () => {
       "current-page",
     );
     // expect genre in url to be null
-    screen.debug();
   });
 
   test.skip("when query genre is not present in url", async () => {
     render(<Wrapper query="?page=3" />);
-    await waitFor(() => {
-      expect(window.location.href).toBe("?page=3&genre=null");
-    });
+    console.log(window.location.href);
+    // expect genre in url to be completed with genre null
+    expect(window.location.search).toBe("?page=3&genre=null");
   });
 
   test("Renders error message", async () => {
