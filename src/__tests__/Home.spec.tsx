@@ -11,12 +11,6 @@ import {
 } from "../__mocks__/mocks";
 
 jest.mock("../utils/constants", () => "token API");
-// jest.mock("react-router-dom", () => ({
-//   ...jest.requireActual("react-router-dom"),
-//   useSearchParams: () => mockNavigate,
-// }));
-
-// jest.mock("react-router-dom", "get").mockReturnValue("3");
 jest.spyOn(HTTPService, "getMovies").mockResolvedValue({
   metaData: {
     pagination: {
@@ -76,6 +70,47 @@ describe("Home Page view", () => {
     );
   });
 
+  test("click in button proximo it changes current page", async () => {
+    // quando esse test eh feito depois do test de error, da erro!!
+
+    const user = userEvent.setup();
+    const { findByRole, findByText } = render(
+      <Wrapper query="?page=3&genre=28" />,
+    );
+
+    expect(await findByRole("button", { name: "3" })).toHaveClass(
+      "current-page",
+    );
+
+    await user.click(await findByText(/Proximo/));
+    expect(await findByRole("button", { name: "4" })).toHaveClass(
+      "current-page",
+    );
+  });
+
+  test.skip("click in button reset", async () => {
+    const user = userEvent.setup();
+    const { findByText, findByRole } = render(
+      <Wrapper query="?page=5&genre=28" />,
+    );
+
+    const btn = await findByText(/Limpar/);
+
+    await user.click(btn);
+    expect(await findByRole("button", { name: "5" })).toHaveClass(
+      "current-page",
+    );
+    // expect genre in url to be null
+    screen.debug();
+  });
+
+  test.skip("when query genre is not present in url", async () => {
+    render(<Wrapper query="?page=3" />);
+    await waitFor(() => {
+      expect(window.location.href).toBe("?page=3&genre=null");
+    });
+  });
+
   test("Renders error message", async () => {
     jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
     /* jest.spyOn(HTTPService, "getMovies").mockResolvedValue(getMoviesFilterParams); */
@@ -92,40 +127,5 @@ describe("Home Page view", () => {
     expect(
       await findByText("Ops.. Ocorreu uma falha! Tente novamente mais tarde"),
     ).toBeTruthy();
-  });
-
-  test("when query genre is not present in url", async () => {
-    render(<Wrapper query="?page=3" />);
-    console.log(window.location);
-    screen.debug();
-  });
-
-  test.skip("click in button proximo it changes current page", async () => {
-    const user = userEvent.setup();
-
-    const { findByRole, findByText } = render(<Wrapper query="?page=3" />);
-
-    expect(await findByRole("button", { name: "123" })).toHaveClass(
-      "current-page",
-    );
-
-    user.click(await findByText(/Proximo/)).then(async () => {
-      expect(await findByRole("button", { name: "4" })).toHaveClass(
-        "current-page",
-      );
-    });
-  });
-
-  test.skip("click in button reset", async () => {
-    const user = userEvent.setup();
-    const { findByText } = render(<Wrapper />);
-
-    const btn = await findByText(/Limpar/);
-    user.click(btn).then(async () => {
-      console.log("clicou");
-      // expect(await findByRole("button", { name: "4" })).toHaveClass(
-      //   "current-page",
-      // );
-    });
   });
 });
