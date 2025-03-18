@@ -53,6 +53,22 @@ const getMoviesFilterParams = {
   },
 };
 
+const getMoviesFilterParamsWithSortByPopularity = {
+  filters: {
+    page: 3, // mock
+    genreId: 28,
+    sortBy: "popularity.desc",
+  },
+};
+
+const getMoviesFilterParamsWithSortByTitle = {
+  filters: {
+    page: 3, // mock
+    genreId: 28,
+    sortBy: "title.desc",
+  },
+};
+
 describe("Home Page view", () => {
   test("Renders Home at page 3", async () => {
     const { queryByText, findAllByRole, findByRole } = render(
@@ -72,6 +88,55 @@ describe("Home Page view", () => {
     expect(await findByRole("button", { name: "3" })).toHaveClass(
       "current-page",
     );
+  });
+
+  test("Renders Home sorted by popularity.desc", async () => {
+    const { getByText, queryByText, findByText, getAllByRole } = render(
+      <Wrapper query="?page=3&genre=28&sort_by=popularity.desc" />,
+    );
+
+    expect(queryByText("carregando...")).toBeInTheDocument();
+    expect(await findByText("carregando...")).not.toBeInTheDocument(); // initially present
+
+    await waitFor(() => {
+      expect(HTTPService.getMovies).toHaveBeenCalledWith(
+        getMoviesFilterParamsWithSortByPopularity,
+        map,
+      );
+    });
+    const all = getAllByRole("listitem");
+    const firstMovie = getByText("Wonka");
+    const lastMovie = getByText("Badland Hunters");
+    expect(firstMovie.compareDocumentPosition(lastMovie)).toBe(4);
+    expect(all[0]).toHaveTextContent("Wonka");
+    expect(all[1]).toHaveTextContent("Sixty Minutes");
+    expect(all[2]).toHaveTextContent("Skal");
+    expect(all[3]).toHaveTextContent("Family Plan");
+    expect(all[4]).toHaveTextContent("Badland Hunters");
+  });
+
+  test("Renders Home sorted by title.desc", async () => {
+    const { queryByText, getAllByRole } = render(
+      <Wrapper query="?page=3&genre=28&sort_by=title.desc" />,
+    );
+
+    expect(queryByText("carregando...")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(queryByText("carregando...")).not.toBeInTheDocument(); // initially present
+      expect(HTTPService.getMovies).toHaveBeenCalledWith(
+        getMoviesFilterParamsWithSortByTitle,
+        map,
+      );
+
+      const all = getAllByRole("listitem");
+
+      expect(all[0]).toHaveTextContent("Wonka");
+      expect(all[1]).toHaveTextContent("Family Plan");
+      expect(all[2]).toHaveTextContent("Skal");
+      expect(all[3]).toHaveTextContent("Sixty Minutes");
+      expect(all[4]).toHaveTextContent("Badland Hunters");
+    });
   });
 
   test("click in button proximo it changes current page", async () => {
