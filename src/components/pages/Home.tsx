@@ -147,12 +147,14 @@ function Home() {
       {!!movies.length && !error && (
         <>
           <ListOptions
+            label="Gender"
             options={genreOptions}
             selectedOption={selectedOptionGenre}
             onChange={setQueryGenre}
             onClear={() => setQueryGenre(null)}
           />
           <ListOptions
+            label="Sort by"
             options={sortOptions}
             selectedOption={selectedOptionSort}
             onChange={setQuerySortBy}
