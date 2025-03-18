@@ -136,7 +136,7 @@ function Home() {
     setSearchParams({
       page: queryPage.toString(),
       genre: queryGenre?.toString() || "null",
-      sort_by: querySortBy?.toString() || "null",
+      sort_by: querySortBy || "null",
     });
     handleSelectedOption();
   }, [queryPage, queryGenre, querySortBy]);

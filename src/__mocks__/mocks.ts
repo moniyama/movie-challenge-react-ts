@@ -250,6 +250,11 @@ const selectedGenderOptions: IMovieLabel = {
   label: "Ação",
 };
 
+const map = new Map();
+map.set(28, "Ação");
+map.set(35, "Comédia");
+map.set(18, "Drama");
+
 export {
   filmesAPI,
   getMoviesServiceParameter,
@@ -258,4 +263,5 @@ export {
   genderOptions,
   selectedGenderOptions,
   movieDetailsAPI,
+  map,
 };
