@@ -17,9 +17,9 @@ function Pagination({
   ]);
 
   const createArrayPageToDisplay = (page: number) => {
-    // revisar - bug ao iniciar a page > 10
     let newDisplay: number[] = displayPages;
     let index = 1;
+
     const hasMoreDisplayedPagesThanTotalPages =
       totalPages < newDisplay[newDisplay.length - 1];
     if (hasMoreDisplayedPagesThanTotalPages) {
@@ -36,7 +36,7 @@ function Pagination({
       const pageIsHigher = page > displayPages[9];
       if (pageIsHigher) {
         index = displayPages[9] + 1;
-        while (index + 10 < page) {
+        while (index + 10 <= page) {
           index += 10;
         }
       } else {

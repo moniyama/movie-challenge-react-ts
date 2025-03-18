@@ -5,7 +5,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/pWsD91G2R1Da3AKM3ymr3UoIfRb.jpg",
-    genre_ids: [878, 28, 18],
+    genre_ids: [28],
     id: 933131,
     original_language: "ko",
     original_title: "황야",
@@ -22,7 +22,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/yyFc8Iclt2jxPmLztbP617xXllT.jpg",
-    genre_ids: [35, 28, 14],
+    genre_ids: [35, 28],
     id: 787699,
     original_language: "en",
     original_title: "Wonka",
@@ -39,7 +39,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/unvtbkgxh47BewQ8pENvdOdme0r.jpg",
-    genre_ids: [28, 18],
+    genre_ids: [18],
     id: 1212073,
     original_language: "de",
     original_title: "60 Minuten",
@@ -56,7 +56,7 @@ const filmesAPI: IMovieAPI[] = [
   {
     adult: false,
     backdrop_path: "/s9YTxwaByYeoSqugYjJJtZjMRAG.jpg",
-    genre_ids: [28, 27, 35, 53],
+    genre_ids: [28, 18],
     id: 1211483,
     original_language: "en",
     original_title: "Skal - Fight for Survival",
@@ -88,6 +88,79 @@ const filmesAPI: IMovieAPI[] = [
     vote_count: 947,
   },
 ];
+
+const movieDetailsAPI = {
+  adult: false,
+  backdrop_path: "/pWsD91G2R1Da3AKM3ymr3UoIfRb.jpg",
+  belongs_to_collection: {
+    id: 1196130,
+    name: "Concrete Utopia Collection",
+    poster_path: "/l4emA6jN9YQxhdpoZ4IThpMofc6.jpg",
+    backdrop_path: "/9iJi448p9cvnpnLN7C0jBFjSseX.jpg",
+  },
+  budget: 0,
+  genres: [
+    {
+      id: 878,
+      name: "Science Fiction",
+    },
+    {
+      id: 28,
+      name: "Action",
+    },
+  ],
+  homepage: "https://www.netflix.com/title/81721676",
+  id: 933131,
+  imdb_id: "tt29722855",
+  original_language: "ko",
+  original_title: "황야",
+  overview:
+    "After a deadly earthquake turns Seoul into a lawless badland, a fearless huntsman springs into action to rescue a teenager abducted by a mad doctor.",
+  popularity: 229.782,
+  poster_path: "/sdI9ufheNPAKnWLl2hnsZKVk0EG.jpg",
+  production_companies: [
+    {
+      id: 127541,
+      logo_path: "/Aq35mXuZv7lhPm8a60YKRaB9Vek.png",
+      name: "Climax Studios",
+      origin_country: "KR",
+    },
+    {
+      id: 129217,
+      logo_path: "/s5rN5NUfE9yx21Yh0CuLULAGH5Y.png",
+      name: "Big Punch Pictures",
+      origin_country: "KR",
+    },
+    {
+      id: 159339,
+      logo_path: null,
+      name: "Nova Film",
+      origin_country: "KR",
+    },
+  ],
+  production_countries: [
+    {
+      iso_3166_1: "KR",
+      name: "South Korea",
+    },
+  ],
+  release_date: "2024-01-25",
+  revenue: 0,
+  runtime: 107,
+  spoken_languages: [
+    {
+      english_name: "Korean",
+      iso_639_1: "ko",
+      name: "한국어/조선말",
+    },
+  ],
+  status: "Released",
+  tagline: "One last hunt to save us all.",
+  title: "Badland Hunters",
+  video: false,
+  vote_average: 6.762,
+  vote_count: 554,
+};
 
 const transformedFilmes: IMovie[] = [
   {
@@ -179,4 +252,5 @@ export {
   movieGenderResponse,
   genderOptions,
   selectedGenderOptions,
+  movieDetailsAPI,
 };
