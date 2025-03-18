@@ -229,7 +229,7 @@ const getMoviesServiceParameter: IPagination = {
   filters: {
     page: 3,
     genreId: 28,
-    sortBy: "sort",
+    sortBy: null,
   },
 };
 
