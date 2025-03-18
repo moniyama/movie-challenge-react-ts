@@ -59,6 +59,20 @@ function Home() {
         },
         map,
       );
+
+      if (querySortBy?.includes("title")) {
+        result.movies.sort((a, b) => a.title.localeCompare(b.title));
+        if (querySortBy?.includes("desc")) {
+          result.movies.reverse();
+        }
+      }
+      if (querySortBy?.includes("popularity")) {
+        result.movies.sort((a, b) => a.popularity - b.popularity);
+        if (querySortBy?.includes("desc")) {
+          result.movies.reverse();
+        }
+      }
+
       setMovies(result.movies);
       setTotalPages(result.metaData.pagination.totalPages);
     } catch (err) {
