@@ -57,7 +57,7 @@ describe("List options Component", () => {
 
     const selects = await findByRole("combobox");
     fireEvent.change(selects, { target: { value: "28" } });
-    expect(onChangeMock).toHaveBeenCalledWith(28);
+    expect(onChangeMock).toHaveBeenCalledWith("28");
   });
 
   it("on change is fired when selected value is default", async () => {
