@@ -240,13 +240,13 @@ const movieGenderResponse: IMovieGenre[] = [
 ];
 
 const genderOptions: IMovieLabel[] = [
-  { value: 28, label: "Ação" },
-  { value: 35, label: "Comédia" },
-  { value: 18, label: "Drama" },
+  { value: "28", label: "Ação" },
+  { value: "35", label: "Comédia" },
+  { value: "18", label: "Drama" },
 ];
 
 const selectedGenderOptions: IMovieLabel = {
-  value: 28,
+  value: "28",
   label: "Ação",
 };
 
