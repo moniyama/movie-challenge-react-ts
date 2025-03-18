@@ -1,5 +1,5 @@
 export interface IMovieLabel {
-  value: number;
+  value: string;
   label: string;
 }
 
@@ -20,7 +20,7 @@ function ListOptions({
         value={selectedOption?.value || "default"}
         onChange={(event) => {
           if (event.target.value !== "default") {
-            onChange(Number(event.target.value));
+            onChange(event.target.value);
           } else {
             onChange(null);
           }

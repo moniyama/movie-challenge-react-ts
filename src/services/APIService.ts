@@ -24,9 +24,9 @@ const HTTPService = {
     const { filters } = props;
     let query = "";
     if (!filters.genreId) {
-      query = `?page=${filters.page}?sort_by=${filters.sortBy}`;
+      query = `?page=${filters.page}&sort_by=${filters.sortBy}`;
     } else {
-      query = `?page=${filters.page}?sort_by=${filters.sortBy}&with_genres=${filters.genreId}`;
+      query = `?page=${filters.page}&sort_by=${filters.sortBy}&with_genres=${filters.genreId}`;
     }
     const url = `https://api.themoviedb.org/3/discover/movie${query}`;
 

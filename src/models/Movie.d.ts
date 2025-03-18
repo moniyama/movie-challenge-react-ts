@@ -4,7 +4,7 @@ export interface IMovie {
   releaseYear: number;
   poster: string;
   overview: string;
-  voteAverage: number;
+  popularity: number;
   language: string;
   genre: string[];
 }

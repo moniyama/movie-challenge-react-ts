@@ -11,6 +11,7 @@ function formatMovie(movie: IMovieAPI, genres: Map<number, string>): IMovie {
     voteAverage: movie.vote_average,
     language: movie.original_language,
     genre: movie.genre_ids.map((genreId) => genres.get(genreId) || ""),
+    popularity: movie.popularity,
   };
 
   return result;
@@ -26,7 +27,7 @@ function formatGenresToMap(arr: IMovieGenre[] = []) {
 }
 
 function formatGenresToOptions(arr: IMovieGenre[] = []) {
-  return arr.map((item) => ({ value: item.id, label: item.name }));
+  return arr.map((item) => ({ value: String(item.id), label: item.name }));
 }
 
 export { formatMovie, formatGenresToMap, formatGenresToOptions };

@@ -49,7 +49,7 @@ function MovieDetail() {
             alt={`poster do filme ${movieDetail.title}`}
           />
           <p>{movieDetail.overview}</p>
-          <p>Nota: {movieDetail.voteAverage}</p>
+          <p>Popularity: {movieDetail.popularity}</p>
           <p>{movieDetail.releaseYear}</p>
           <p>{movieDetail.genre.join(", ")}</p>
           <button type="button" onClick={() => navigate(-1)}>

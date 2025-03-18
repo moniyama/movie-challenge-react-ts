@@ -20,6 +20,9 @@ function Home() {
   const [queryGenre, setQueryGenre] = useState<number | null>(
     Number(searchParams.get("genre")) || null,
   );
+  const [querySortBy, setQuerySortBy] = useState<string | null>(
+    searchParams.get("sort_by") || null,
+  );
 
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -27,12 +30,17 @@ function Home() {
 
   const [genresMap, setGenresMap] = useState<Map<number, string>>(new Map());
   const [genreOptions, setGenreOptions] = useState<IMovieLabel[]>([]);
+  const [sortOptions, setSortOptions] = useState<IMovieLabel[]>([]);
 
-  // const [sortBy, setSortBy] = useState<string | null>(null);
-  const [selectedOption, setSelectedOption] = useState<IMovieLabel | null>(
-    genreOptions.find((item) => item.value === queryGenre) || null,
-  );
+  const [selectedOptionGenre, setSelectedOptionGenre] =
+    useState<IMovieLabel | null>(
+      genreOptions.find((item) => item.value === String(queryGenre)) || null,
+    );
 
+  const [selectedOptionSort, setSelectedOptionSort] =
+    useState<IMovieLabel | null>(
+      sortOptions.find((item) => item.value === String(querySortBy)) || null,
+    );
   async function getGenres() {
     return HTTPService.getMovieGenre();
   }
@@ -46,7 +54,7 @@ function Home() {
           filters: {
             page,
             genreId: queryGenre || null,
-            sortBy: "sortBy" || null,
+            sortBy: querySortBy || null,
           },
         },
         map,
@@ -68,15 +76,30 @@ function Home() {
     }
   }
 
+  function updateSortOnInit() {
+    setSortOptions([
+      { value: "popularity.asc", label: "Least popular" },
+      { value: "popularity.desc", label: "Most popular" },
+      { value: "title.asc", label: "Titles A-Z" },
+      { value: "title.desc", label: "Titles Z-A" },
+    ]);
+  }
+
   function handleSelectedOption() {
     if (queryGenre) {
       const find =
-        genreOptions.find((item) => item.value === queryGenre) || null;
-      setSelectedOption(find);
+        genreOptions.find((item) => item.value === String(queryGenre)) || null;
+      setSelectedOptionGenre(find);
     } else {
-      setSelectedOption(null);
+      setSelectedOptionGenre(null);
     }
-
+    if (querySortBy) {
+      const find =
+        sortOptions.find((item) => item.value === querySortBy) || null;
+      setSelectedOptionSort(find);
+    } else {
+      setSelectedOptionSort(null);
+    }
     getMovies(queryPage, genresMap);
   }
 
@@ -86,6 +109,7 @@ function Home() {
 
   useEffect(() => {
     updateGenresOnInit();
+    updateSortOnInit();
   }, []);
 
   useEffect(() => {
@@ -97,9 +121,10 @@ function Home() {
     setSearchParams({
       page: queryPage.toString(),
       genre: queryGenre?.toString() || "null",
+      sort_by: querySortBy?.toString() || "null",
     });
     handleSelectedOption();
-  }, [queryPage, queryGenre]);
+  }, [queryPage, queryGenre, querySortBy]);
 
   return (
     <>
@@ -109,9 +134,15 @@ function Home() {
         <>
           <ListOptions
             options={genreOptions}
-            selectedOption={selectedOption}
+            selectedOption={selectedOptionGenre}
             onChange={setQueryGenre}
             onClear={() => setQueryGenre(null)}
+          />
+          <ListOptions
+            options={sortOptions}
+            selectedOption={selectedOptionSort}
+            onChange={setQuerySortBy}
+            onClear={() => setQuerySortBy("null")}
           />
           <MovieList movies={movies} />
           <Pagination
