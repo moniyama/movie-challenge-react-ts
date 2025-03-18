@@ -173,6 +173,7 @@ const transformedFilmes: IMovie[] = [
     title: "Badland Hunters",
     voteAverage: 6.74,
     genre: ["ação"],
+    popularity: 229.782,
   },
   {
     id: 787699,
@@ -184,6 +185,7 @@ const transformedFilmes: IMovie[] = [
     title: "Wonka",
     voteAverage: 7.2,
     genre: ["aventura", "comédia"],
+    popularity: 1175.854,
   },
   {
     id: 1212073,
@@ -195,6 +197,7 @@ const transformedFilmes: IMovie[] = [
     title: "Sixty Minutes",
     voteAverage: 6.864,
     genre: ["ação", "comédia"],
+    popularity: 1037.758,
   },
   {
     id: 1211483,
@@ -206,6 +209,7 @@ const transformedFilmes: IMovie[] = [
     title: "Skal - Fight for Survival",
     voteAverage: 5.75,
     genre: ["familia", "ação"],
+    popularity: 1000.333,
   },
   {
     id: 1029575,
@@ -217,6 +221,7 @@ const transformedFilmes: IMovie[] = [
     title: "The Family Plan",
     voteAverage: 7.331,
     genre: ["aventura", "familia"],
+    popularity: 980.464,
   },
 ];
 
@@ -235,13 +240,13 @@ const movieGenderResponse: IMovieGenre[] = [
 ];
 
 const genderOptions: IMovieLabel[] = [
-  { value: 28, label: "Ação" },
-  { value: 35, label: "Comédia" },
-  { value: 18, label: "Drama" },
+  { value: "28", label: "Ação" },
+  { value: "35", label: "Comédia" },
+  { value: "18", label: "Drama" },
 ];
 
 const selectedGenderOptions: IMovieLabel = {
-  value: 28,
+  value: "28",
   label: "Ação",
 };
 

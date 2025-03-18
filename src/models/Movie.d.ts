@@ -5,6 +5,7 @@ export interface IMovie {
   poster: string;
   overview: string;
   voteAverage: number;
+  popularity: number;
   language: string;
   genre: string[];
 }

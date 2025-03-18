@@ -1,5 +1,5 @@
 export interface IMovieLabel {
-  value: number;
+  value: string;
   label: string;
 }
 
@@ -8,19 +8,23 @@ function ListOptions({
   selectedOption,
   onChange,
   onClear,
+  label,
 }: {
   options: IMovieLabel[];
   selectedOption: IMovieLabel | null;
   onChange: Function;
   onClear: Function;
+  label: string;
 }) {
   return (
-    <>
+    <label htmlFor={label}>
+      {label}:{" "}
       <select
+        id={label}
         value={selectedOption?.value || "default"}
         onChange={(event) => {
           if (event.target.value !== "default") {
-            onChange(Number(event.target.value));
+            onChange(event.target.value);
           } else {
             onChange(null);
           }
@@ -36,7 +40,7 @@ function ListOptions({
       <button type="button" onClick={() => onClear()}>
         Limpar
       </button>
-    </>
+    </label>
   );
 }
 

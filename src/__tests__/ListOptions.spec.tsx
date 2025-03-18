@@ -11,6 +11,7 @@ describe("List options Component", () => {
   it("render component", async () => {
     const { findAllByRole, getByText } = render(
       <ListOptions
+        label="gender"
         options={genderOptions}
         selectedOption={selectedGenderOptions}
         onChange={(e: number | null) => onChangeMock(e)}
@@ -28,6 +29,7 @@ describe("List options Component", () => {
   it("render component when selected option is null", async () => {
     const { findAllByRole } = render(
       <ListOptions
+        label="gender"
         options={genderOptions}
         selectedOption={null}
         onChange={(e: number | null) => onChangeMock(e)}
@@ -45,6 +47,7 @@ describe("List options Component", () => {
   it("on change is fired when selected value is 28", async () => {
     const { findByRole } = render(
       <ListOptions
+        label="gender"
         options={genderOptions}
         selectedOption={selectedGenderOptions}
         onChange={(e: number | null) => onChangeMock(e)}
@@ -60,6 +63,7 @@ describe("List options Component", () => {
   it("on change is fired when selected value is default", async () => {
     const { findByRole } = render(
       <ListOptions
+        label="gender"
         options={genderOptions}
         selectedOption={selectedGenderOptions}
         onChange={(e: number | null) => onChangeMock(e)}
@@ -75,6 +79,7 @@ describe("List options Component", () => {
   it("clean button is fired", async () => {
     const { findByRole } = render(
       <ListOptions
+        label="gender"
         options={genderOptions}
         selectedOption={selectedGenderOptions}
         onChange={(e: number | null) => onChangeMock(e)}
