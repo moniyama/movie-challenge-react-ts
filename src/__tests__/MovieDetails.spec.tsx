@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
-import MovieDetails from "../components/MovieDetails/MovieDetails";
+import MovieDetails from "../components/pages/MovieDetails";
 import { movieGenderResponse, transformedFilmes } from "../__mocks__/mocks";
 import HTTPService from "../services/APIService";
 import "@testing-library/jest-dom";

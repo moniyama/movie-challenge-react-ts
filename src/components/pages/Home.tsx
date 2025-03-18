@@ -9,6 +9,7 @@ import {
   formatGenresToOptions,
 } from "../../utils/transformers";
 import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
+import ErrorPage from "./Error";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -143,7 +144,7 @@ function Home() {
   return (
     <>
       {isLoading ? <p>carregando...</p> : ""}
-      {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
+      {error && <ErrorPage />}
       {!!movies.length && !error && (
         <>
           <ListOptions
