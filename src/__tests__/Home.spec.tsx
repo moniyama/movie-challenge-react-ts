@@ -45,9 +45,16 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+const getMoviesFilterParamsNull = {
+  filters: {
+    page: 3,
+    genreId: null,
+    sortBy: null,
+  },
+};
 const getMoviesFilterParams = {
   filters: {
-    page: 3, // mock
+    page: 3,
     genreId: 28,
     sortBy: null,
   },
@@ -55,7 +62,7 @@ const getMoviesFilterParams = {
 
 const getMoviesFilterParamsWithSortByPopularity = {
   filters: {
-    page: 3, // mock
+    page: 3,
     genreId: 28,
     sortBy: "popularity.desc",
   },
@@ -63,13 +70,53 @@ const getMoviesFilterParamsWithSortByPopularity = {
 
 const getMoviesFilterParamsWithSortByTitle = {
   filters: {
-    page: 3, // mock
+    page: 3,
     genreId: 28,
     sortBy: "title.desc",
   },
 };
 
-describe("Home Page view", () => {
+describe("Home Page interactions", () => {
+  test("click in button proximo it changes current page", async () => {
+    const user = userEvent.setup();
+
+    const { findByRole, getByText, getByRole } = render(
+      <Wrapper query="?page=3&genre=28&sort_by=null" />,
+    );
+
+    expect(await findByRole("button", { name: "3" })).toHaveClass(
+      "current-page",
+    );
+
+    await waitFor(() => {
+      user.click(getByText(/Proximo/));
+      expect(getByRole("button", { name: "4" })).toHaveClass("current-page");
+    });
+  });
+
+  test.skip("select a sort select option", async () => {
+    const user = userEvent.setup();
+    const { findByRole } = render(
+      <Wrapper query="?page=3&genre=28&sort_by=null" />,
+    );
+    const option = findByRole("option", { name: "Most popular" });
+    user.selectOptions(await option, "popularity.desc");
+    // screen.debug();
+
+    // const btn = await findByText(/Most popular/);
+    await waitFor(() => {
+      // expect(HTTPService.getMovies).toHaveBeenNthCalledWith(
+      //   3, // nth time
+      //   getMoviesFilterParamsWithSortByPopularity,
+      //   map,
+      // );
+    });
+
+    // expect genre in url to be null
+  });
+});
+
+describe("Home Page render views", () => {
   test("Renders Home at page 3", async () => {
     const { queryByText, findAllByRole, findByRole } = render(
       <Wrapper query="?page=3&genre=28" />,
@@ -90,29 +137,41 @@ describe("Home Page view", () => {
     );
   });
 
+  test("Renders Home at page 3, an call api with genre null", async () => {
+    const { queryByText } = render(<Wrapper query="?page=3&genre=null" />);
+
+    await waitFor(() => {
+      expect(queryByText("carregando...")).not.toBeInTheDocument(); // initially present
+      expect(HTTPService.getMovies).toHaveBeenCalledWith(
+        getMoviesFilterParamsNull,
+        map,
+      );
+    });
+  });
+
   test("Renders Home sorted by popularity.desc", async () => {
     const { getByText, queryByText, findByText, getAllByRole } = render(
       <Wrapper query="?page=3&genre=28&sort_by=popularity.desc" />,
     );
 
     expect(queryByText("carregando...")).toBeInTheDocument();
-    expect(await findByText("carregando...")).not.toBeInTheDocument(); // initially present
+    expect(await findByText("carregando...")).not.toBeInTheDocument(); // get inside waitfor
 
     await waitFor(() => {
       expect(HTTPService.getMovies).toHaveBeenCalledWith(
         getMoviesFilterParamsWithSortByPopularity,
         map,
       );
+      const all = getAllByRole("listitem");
+      const firstMovie = getByText("Wonka");
+      const lastMovie = getByText("Badland Hunters");
+      expect(firstMovie.compareDocumentPosition(lastMovie)).toBe(4);
+      expect(all[0]).toHaveTextContent("Wonka");
+      expect(all[1]).toHaveTextContent("Sixty Minutes");
+      expect(all[2]).toHaveTextContent("Skal");
+      expect(all[3]).toHaveTextContent("Family Plan");
+      expect(all[4]).toHaveTextContent("Badland Hunters");
     });
-    const all = getAllByRole("listitem");
-    const firstMovie = getByText("Wonka");
-    const lastMovie = getByText("Badland Hunters");
-    expect(firstMovie.compareDocumentPosition(lastMovie)).toBe(4);
-    expect(all[0]).toHaveTextContent("Wonka");
-    expect(all[1]).toHaveTextContent("Sixty Minutes");
-    expect(all[2]).toHaveTextContent("Skal");
-    expect(all[3]).toHaveTextContent("Family Plan");
-    expect(all[4]).toHaveTextContent("Badland Hunters");
   });
 
   test("Renders Home sorted by title.desc", async () => {
@@ -139,58 +198,13 @@ describe("Home Page view", () => {
     });
   });
 
-  test("click in button proximo it changes current page", async () => {
-    // quando esse test eh feito depois do test de error, da erro!!
-
-    const user = userEvent.setup();
-    const { findByRole, findByText } = render(
-      <Wrapper query="?page=3&genre=28&sort_by=null" />,
-    );
-
-    expect(await findByRole("button", { name: "3" })).toHaveClass(
-      "current-page",
-    );
-
-    await user.click(await findByText(/Proximo/));
-    expect(await findByRole("button", { name: "4" })).toHaveClass(
-      "current-page",
-    );
-  });
-
   test("Renders error message", async () => {
-    jest.spyOn(HTTPService, "getMovies").mockRejectedValue({});
+    jest.spyOn(HTTPService, "getMovies").mockRejectedValue({}); // all tests after will became rejected
 
-    const { getByText, findByText } = render(
-      <Wrapper query="?page=3&genre=28" />,
-    );
+    const { getByText } = render(<Wrapper query="?page=3&genre=28" />);
     await waitFor(() => {
       const message = getByText("Sorry, an unexpected error has occurred.");
       expect(message).toBeInTheDocument();
     });
-    expect(
-      await findByText("Sorry, an unexpected error has occurred."),
-    ).toBeTruthy();
-  });
-
-  test.skip("click in button reset", async () => {
-    const user = userEvent.setup();
-    const { findByText, findByRole } = render(
-      <Wrapper query="?page=5&genre=28" />,
-    );
-
-    const btn = await findByText(/Limpar/);
-
-    await user.click(btn);
-    expect(await findByRole("button", { name: "5" })).toHaveClass(
-      "current-page",
-    );
-    // expect genre in url to be null
-  });
-
-  test.skip("when query genre is not present in url", async () => {
-    render(<Wrapper query="?page=3" />);
-    console.log(window.location.href);
-    // expect genre in url to be completed with genre null
-    expect(window.location.search).toBe("?page=3&genre=null");
   });
 });
