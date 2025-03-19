@@ -1,34 +1,24 @@
 import {
   filmesAPI,
   getMoviesServiceParameter,
+  map,
   movieDetailsAPI,
 } from "../__mocks__/mocks";
 import HTTPService from "./APIService";
 
 jest.mock("../utils/constants", () => "token API");
 
-// NOT WORKING
-// const fetchMock = jest.spyOn(global, "fetch")
-//   .mockImplementation(() =>
-//     Promise.resolve(new Response(`{ json: () => Promise.resolve([]) }`)),
-//   );
-
 beforeEach(() => {
   global.fetch = jest.fn().mockClear();
 });
 
 const options = {
-  headers: {
-    Authorization: "Bearer token API",
-    "User-Agent": "insomnia/8.6.1",
-  },
   method: "GET",
+  headers: {
+    "User-Agent": "insomnia/8.6.1",
+    Authorization: "Bearer token API",
+  },
 };
-
-const map = new Map();
-map.set(28, "acao");
-map.set(35, "comedia");
-map.set(18, "drama");
 
 describe("HTTP API Service - getMovies", () => {
   it("getMovies returns an object with array of movies", () => {
@@ -47,7 +37,7 @@ describe("HTTP API Service - getMovies", () => {
       expect(resp.movies.length).toBe(5);
       expect(resp.movies[0].id).toBe(933131);
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.themoviedb.org/3/discover/movie?page=3?sort_by=sort&with_genres=28",
+        "https://api.themoviedb.org/3/discover/movie?include_adult=false&page=3&sort_by=null&with_genres=28",
         options,
       );
     });
@@ -69,14 +59,14 @@ describe("HTTP API Service - getMovies", () => {
         filters: {
           page: 3,
           genreId: null,
-          sortBy: "sort",
+          sortBy: null,
         },
       },
       map,
     ).then((resp) => {
       expect(resp.movies).not.toBeNull();
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.themoviedb.org/3/discover/movie?page=3?sort_by=sort",
+        "https://api.themoviedb.org/3/discover/movie?include_adult=false&page=3&sort_by=null",
         options,
       );
     });
@@ -95,7 +85,7 @@ describe("HTTP API Service - getMovies", () => {
         success: false,
       });
       expect(global.fetch).toHaveBeenCalledWith(
-        "https://api.themoviedb.org/3/discover/movie?page=3?sort_by=sort&with_genres=28",
+        "https://api.themoviedb.org/3/discover/movie?include_adult=false&page=3&sort_by=null&with_genres=28",
         options,
       );
     });

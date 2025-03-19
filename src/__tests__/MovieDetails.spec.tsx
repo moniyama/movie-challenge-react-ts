@@ -1,18 +1,25 @@
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
-import MovieDetails from "../components/MovieDetails/MovieDetails";
-import { movieGenderResponse, transformedFilmes } from "../__mocks__/mocks";
+import { cleanup, fireEvent, render } from "@testing-library/react";
+import MovieDetails from "../components/pages/MovieDetails";
+import {
+  map,
+  movieGenderResponse,
+  transformedFilmes,
+} from "../__mocks__/mocks";
 import HTTPService from "../services/APIService";
 import "@testing-library/jest-dom";
 
 jest.mock("../utils/constants", () => "token API");
 
 const mockNavigate = jest.fn();
-const mockParams = jest.fn().mockReturnValue({ movieId: 933131 });
+const mockParams = { movieId: 933131 };
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockNavigate,
   useParams: () => mockParams,
+  useRouteError: jest.fn(),
+  isRouteErrorResponse: jest.fn(),
+  Link: jest.fn(),
 }));
 
 jest
@@ -35,7 +42,6 @@ describe("Movie Details Component", () => {
     const { findAllByRole, findAllByText, findByAltText } = render(
       <MovieDetails />,
     );
-
     expect(await findAllByRole("img")).toHaveLength(1);
     expect(await findByAltText("poster do filme Badland Hunters")).toBeTruthy();
     expect(await findAllByText(/Badland Hunters/)).toBeTruthy();
@@ -52,17 +58,16 @@ describe("Movie Details Component", () => {
 
   it("Renders error message", async () => {
     jest.spyOn(HTTPService, "getMovieDetail").mockRejectedValue({});
+    const { findByText, getByText } = render(<MovieDetails />);
 
-    const { getByText, findByText } = render(<MovieDetails />);
-    await waitFor(() => {
-      const message = getByText(
-        "Ops.. Ocorreu uma falha! Tente novamente mais tarde",
-      );
-      expect(message).toBeInTheDocument();
-    });
-
+    await findByText("Sorry, an unexpected error has occurred.");
     expect(
-      await findByText("Ops.. Ocorreu uma falha! Tente novamente mais tarde"),
-    ).toBeTruthy();
+      getByText("Sorry, an unexpected error has occurred."),
+    ).toBeInTheDocument();
+    expect(HTTPService.getMovieDetail).toHaveBeenCalledTimes(1);
+    expect(HTTPService.getMovieDetail).toHaveBeenCalledWith(
+      mockParams.movieId,
+      map,
+    );
   });
 });

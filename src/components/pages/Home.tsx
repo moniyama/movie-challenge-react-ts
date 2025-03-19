@@ -9,6 +9,7 @@ import {
   formatGenresToOptions,
 } from "../../utils/transformers";
 import ListOptions, { IMovieLabel } from "../ListOptions/ListOptions";
+import ErrorPage from "./Error";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -49,16 +50,15 @@ function Home() {
     setError(false);
     setIsLoading(true);
     try {
-      const result = await HTTPService.getMovies(
-        {
-          filters: {
-            page,
-            genreId: queryGenre || null,
-            sortBy: querySortBy || null,
-          },
+      const filterParams = {
+        filters: {
+          page,
+          genreId: queryGenre || null,
+          sortBy: querySortBy === "null" ? null : querySortBy,
         },
-        map,
-      );
+      };
+
+      const result = await HTTPService.getMovies(filterParams, map);
 
       if (querySortBy?.includes("title")) {
         result.movies.sort((a, b) => a.title.localeCompare(b.title));
@@ -107,7 +107,7 @@ function Home() {
     } else {
       setSelectedOptionGenre(null);
     }
-    if (querySortBy) {
+    if (querySortBy && querySortBy !== null) {
       const find =
         sortOptions.find((item) => item.value === querySortBy) || null;
       setSelectedOptionSort(find);
@@ -135,7 +135,7 @@ function Home() {
     setSearchParams({
       page: queryPage.toString(),
       genre: queryGenre?.toString() || "null",
-      sort_by: querySortBy?.toString() || "null",
+      sort_by: querySortBy || "null",
     });
     handleSelectedOption();
   }, [queryPage, queryGenre, querySortBy]);
@@ -143,7 +143,7 @@ function Home() {
   return (
     <>
       {isLoading ? <p>carregando...</p> : ""}
-      {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
+      {error && <ErrorPage />}
       {!!movies.length && !error && (
         <>
           <ListOptions
@@ -158,7 +158,7 @@ function Home() {
             options={sortOptions}
             selectedOption={selectedOptionSort}
             onChange={setQuerySortBy}
-            onClear={() => setQuerySortBy("null")}
+            onClear={() => setQuerySortBy(null)}
           />
           <MovieList movies={movies} />
           <Pagination

@@ -18,7 +18,7 @@ function ListOptions({
 }) {
   return (
     <label htmlFor={label}>
-      {label}:{" "}
+      {`${label}: `}
       <select
         id={label}
         value={selectedOption?.value || "default"}

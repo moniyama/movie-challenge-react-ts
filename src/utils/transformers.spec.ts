@@ -38,15 +38,15 @@ describe("formatGenresToMap utils function", () => {
 describe("formatGenresToOptions utils function", () => {
   it("returns array with label & value", async () => {
     expect(formatGenresToOptions(movieGenderResponse)[0]).toEqual({
-      value: 28,
+      value: "28",
       label: "Ação",
     });
     expect(formatGenresToOptions(movieGenderResponse)[1]).toEqual({
-      value: 35,
+      value: "35",
       label: "Comédia",
     });
     expect(formatGenresToOptions(movieGenderResponse)[2]).toEqual({
-      value: 18,
+      value: "18",
       label: "Drama",
     });
   });

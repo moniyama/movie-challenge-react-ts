@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./components/pages/Error";
 import Home from "./components/pages/Home";
-import MovieDetail from "./components/MovieDetails/MovieDetails";
+import MovieDetail from "./components/pages/MovieDetails";
 
 import "./styles/index.css";
 

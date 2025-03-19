@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IMovie } from "../../models/Movie";
 import HTTPService from "../../services/APIService";
 import { formatGenresToMap } from "../../utils/transformers";
+import ErrorPage from "./Error";
 
 function MovieDetail() {
   const params = useParams();
@@ -40,7 +41,7 @@ function MovieDetail() {
   return (
     <main>
       {isLoading ? <p>carregando...</p> : ""}
-      {error && <p>Ops.. Ocorreu uma falha! Tente novamente mais tarde</p>}
+      {error && <ErrorPage />}
       {movieDetail && (
         <>
           <h1>{movieDetail.title}</h1>
